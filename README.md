@@ -1,14 +1,13 @@
 # houston-hackathon-spoken-floodplain
-Placeholder for a potential houston hackathon project about website that tells users when they enter or leave a floodplain using web API for text-to-speech and web API for location  against geojson of 500-yr floodplain extent
 
-## Summary of Product Goal
+Placeholder for a potential houston hackathon project about website that verbally tells users when they enter or leave a floodplain as a supplemental approach to the traditional maps geared to users on the move.
 
-#### Summary
-website that tells a drive when they enter or leave a floodplain, so they don't have to look at a map probably made for desktops on a tiny phone.
+#### Summary of Hackathon Project Idea
+A website that tells a drive when they enter or leave a floodplain, so they don't have to look at a map probably made for desktops on a tiny phone.
 
-#### Technology
-- Web API for text-to-speech
-- Web API for location sharing
+#### Potential Technology
+- Browser Web API for text-to-speech
+- Browser Web API for location sharing
 - Geojson of floodplains in Houston area
 - JavaScript code to check if location inside of geojson's
 - JavaScript code to parse geojson properties and location relative information into text message
@@ -18,10 +17,10 @@ website that tells a drive when they enter or leave a floodplain, so they don't 
 
 #### User Experience
 The basics of this idea's user experience: 
-- The user is the driver of the car.
+- The user is the driver of the car or rider of bicycle.
 - The user clicks to share with the page location and speaker permissions at start, probably when not driving.
-- The website is front-end only so doesn't actually send any data anywhere.
-- The website after permissions are granted, checks the user's location and says whether it is inside a floodplain boundary every X unit of time as configured and/or the direction and distance of the nearest floodplain.
+- The website is front-end only, so it doesn't actually send any user data anywhere. However, this permission must still be given for it to work.
+- The website, after permissions are granted, checks the user's location and says whether it is inside a floodplain boundary every X unit of time as configured and/or the direction and distance of the nearest floodplain.
 
 ## Premise
 Map data is nearly always experienced in 2D geographic format. This, of course, makes sense and is best way for most uses. However, there are situations where other ways of experiencing the same information might make more sense. For example, when you're traveling in a car, you might not want to click on buttons or stare at a screen. For this reason, text-to-speech is a standard part of driving directions from your phone.
