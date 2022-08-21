@@ -3,8 +3,12 @@ Placeholder for a potential houston hackathon project about website that tells u
 
 ## Summary of Product Goal
 
-## Permise
 
+
+## Premise
+Map data is nearly always experienced in 2D geographic format. This, of course, makes sense and is best way for most uses. However, there are situations where other ways of experiencing the same information might make more sense. For example, when you're traveling in a car, you might not want to click on buttons or stare at a screen. For this reason, text-to-speech is a standard part of driving directions from your phone.
+
+When driving around looking at houses to potentially buy, 
 
 ## Data
 
