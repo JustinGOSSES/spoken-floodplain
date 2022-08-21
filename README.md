@@ -41,6 +41,9 @@ https://cohgis-mycity.opendata.arcgis.com/datasets/788ac6b17c154be0ac72f2e7cde02
 
 This data is in geojson format, which makes it easiest to work with on the web. It is in the `/data` directory.
 
+Note this repository might load slowly due to the data involved. LFS (Large File Storage) is used to store it on GitHub.
+If you are forking this repository, you may want to set up LFS. Google how to do this for your operating system. 
+
 Need the 100 year floodplains and the floodway maps as well. 
 
 The size of 500 year floodplain geojson for Harris county is 91MB, which would make page load slow. Might need to dissolve into fewer number of features and then cut into smaller tile areas such that the whole thing doesn't have to load on page load but just a small area around the actual location of the user maybe?
