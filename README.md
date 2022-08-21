@@ -3,8 +3,20 @@ Placeholder for a potential houston hackathon project about website that tells u
 
 ## Summary of Product Goal
 
+#### Summary
+website that tells a drive when they enter or leave a floodplain, so they don't have to look at a map probably made for desktops on a tiny phone.
 
+#### Technology
+- Web API for text-to-speech
+- Web API for location sharing
+- Geojson of floodplains in Houston area
+- JavaScript code to check if location inside of geojson's
+- JavaScript code to parse geojson properties and location relative information into text message
+- JavaScript to turn text to speech
+- JavaScript to control timing
+- JavaScript, CSS, and HTML for front-end user interface and optional map
 
+#### User Experience
 The basics of this idea's user experience: 
 - The user is the driver of the car.
 - The user clicks to share with the page location and speaker permissions at start, probably when not driving.
