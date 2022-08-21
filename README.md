@@ -34,31 +34,38 @@ This prototype will be built with geojson data specific to the Houston area bund
 
 ## Data
 
-### Flood Plain Maps Houston Only
+### 500 Year Flood Plain Maps Houston Only
 https://data.houstontx.gov/sr_Latn/dataset/harris-county-flood-zones/resource/9219732c-d156-46a0-ba46-48c2976f876e
 
 https://cohgis-mycity.opendata.arcgis.com/datasets/788ac6b17c154be0ac72f2e7cde021f4_6/about
 
 This data is in geojson format, which makes it easiest to work with on the web. It is in the `/data` directory.
 
+Need the 100 year floodplains and the floodway maps as well. 
+
+The size of 500 year floodplain geojson for Harris county is 91MB, which would make page load slow. Might need to dissolve into fewer number of features and then cut into smaller tile areas such that the whole thing doesn't have to load on page load but just a small area around the actual location of the user maybe?
+
 ## Web APIs
+Modern browsers enable location sharing through the Location Browser API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Location
 
 ### Web API for Text-to-Speech
-
-### Web API for 
+Modern browsers enable basic text-to-speech capabilities through a browswer API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
 
 ## Prior Art
 - Stratigraphy-Speech:
   - link: https://observablehq.com/@justingosses/stratigraphy-speech
-  - description: Observable notebook that asks for location & speech permissions that tells you a bit about the top layer of the geology you're standing on.
+  - description: Observable notebook that asks for location & speech permissions that tells you a bit about the top layer of the geology you're standing on. This code could be used as a starting point for this project.
 
 ## Permissions On Start Issues
-
+Location sharing and text-to-speech require the user to actively approve each time the page is loaded. Some people may set defaults to stop the page from even asking for permission. Others may have set their browser to only ask once. The typical default behavior is to ask on each page load. This variation in potential user behavior and browser configurations needs to be included in design.
 
 ## Privacy Concerns
+Sometimes people will have location sharing turned off in their browswer as they don't want to share location data. The page will need to tell people that 
+(1) this page won't actually share any of your location data, just use it locally on the page (2) let them know that they may see browser messages about sharing data as the browser is not able to tell the difference between (a) location data that is just used on the page on their device and (b) location data that is sent back to some server.
 
 
 ## Accuracy & Legal Concerns
+Due to the potential decisions made with this data, there will need to be a click through screen with a disclaimer like on other products with similar data.
 
 
 ## Potential Variables
