@@ -112,6 +112,12 @@ Modern browsers enable basic text-to-speech capabilities through a browswer API 
 ## Permissions On Start Issues
 Location sharing and text-to-speech require the user to actively approve each time the page is loaded. Some people may set defaults to stop the page from even asking for permission. Others may have set their browser to only ask once. The typical default behavior is to ask on each page load. This variation in potential user behavior and browser configurations needs to be included in design.
 
+## Potential Technology Issues that Could Require More Time than Hackathon
+- [Confirmed not an issue] Size of Geojson files
+  - Was worried that the total size of the geojson files would make page load so slow as to be unworkable. Loaded a few of them into an Observable notebook. There was a wait but nothing unworkable. There's likely ways to improve page load time further, so a surmountable issue.
+- [Confirmed not an issue] Whether location sharing permission granting works only once or the entire time a page is loaded. 
+  - Messed around in an Obserbable notebook. Once you give permission, looks like the web api for location can be set up to continuously gives location and speed and bearing are optional requests.
+
 ## Privacy Concerns
 Sometimes people will have location sharing turned off in their browswer as they don't want to share location data. The page will need to tell people that 
 (1) this page won't actually share any of your location data, just use it locally on the page (2) let them know that they may see browser messages about sharing data as the browser is not able to tell the difference between (a) location data that is just used on the page on their device and (b) location data that is sent back to some server.
