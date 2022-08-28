@@ -100,36 +100,48 @@ The size of 500 year floodplain geojson for Harris county is 91MB, which would m
 
 *Decided not to use this source as their API is broken for the floodway polygons.* -->
 
-## Web APIs
+## Tools to be Used
+
+### Browser Web APIs
 Modern browsers enable location sharing through the Location Browser API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Location
 
-### Web API for Text-to-Speech
+#### Browswer Web API for Text-to-Speech
 Modern browsers enable basic text-to-speech capabilities through a browswer API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
 
-## Prior Art
+#### Browswer Web API for Location
+TODO
+
+### Turf.js
+Turf.js will be used to determine if the coordinates of the user's location is within a floodplain polygon and return whether it is 500 year plain, 100 year floodplain, or floodway.
+
+### Leaflet.js
+Leaflet.js will be used to display the user's location on a map with an overlay of the floodplains and floodway.
+
+## Considerations
+### Prior Art
 - Stratigraphy-Speech:
   - link: https://observablehq.com/@justingosses/stratigraphy-speech
   - description: Observable notebook that asks for location & speech permissions that tells you a bit about the top layer of the geology you're standing on. This code could be used as a starting point for this project.
 
-## Permissions On Start Issues
+### Permissions On Start Issues
 Location sharing and text-to-speech require the user to actively approve each time the page is loaded. Some people may set defaults to stop the page from even asking for permission. Others may have set their browser to only ask once. The typical default behavior is to ask on each page load. This variation in potential user behavior and browser configurations needs to be included in design.
 
-## Potential Technology Issues that Could Require More Time than Hackathon
+### Potential Technology Issues that Could Require More Time than Hackathon
 - [Confirmed not an issue] Size of Geojson files
   - Was worried that the total size of the geojson files would make page load so slow as to be unworkable. Loaded a few of them into an Observable notebook. There was a wait but nothing unworkable. There's likely ways to improve page load time further, so a surmountable issue.
 - [Confirmed not an issue] Whether location sharing permission granting works only once or the entire time a page is loaded. 
   - Messed around in an Obserbable notebook. Once you give permission, looks like the web api for location can be set up to continuously gives location and speed and bearing are optional requests.
 
-## Privacy Concerns to be Addressed in User Interface
+### Privacy Concerns to be Addressed in User Interface
 Sometimes people will have location sharing turned off in their browswer as they don't want to share location data. The page will need to tell people that 
 (1) this page won't actually share any of your location data, just use it locally on the page (2) let them know that they may see browser messages about sharing data as the browser is not able to tell the difference between (a) location data that is just used on the page on their device and (b) location data that is sent back to some server.
 
 
-## Accuracy & Legal Concerns
+### Accuracy & Legal Concerns
 Due to the potential decisions made with this data, there will need to be a click through screen with a disclaimer like on other products with similar data.
 
 
-## Potential Variables
+### Potential Variables
 
 - How often location is checked
 - What information is provided to user as speech. 
