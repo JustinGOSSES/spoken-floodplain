@@ -35,8 +35,54 @@ _The goal of this experiment is to see if location + text-to-speech can create a
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
 
 ## Data
+Tried a few places to find good floodplain & floodway geojson files specific to boundary of City of Houston or Harris County. Might do a write up eventually of things that don't work or bugs along the way in some of the datasets people might find via a web search. 
 
-### 500 Year Flood Plain Maps Houston Only
+
+### City of Houston Geographic Information Management Service:
+A webpage with graphic user interface and metadata descriptions: https://cohgims.houstontx.gov/arcgis/rest/services/FloodplainDataFMO/MapServer/
+
+Layers:
+- Historic FIRM (2007) (0)
+  - Base Flood Elevation (1)
+  - Cross Section Line (2)
+  - Map Panel Number (3)
+  - Map Change (4)
+  - Conveyance Zone (5)
+  - Flood Zone (6)
+- Historic FIRM (2000) (7)
+  - Flood Zone (8)
+- Effective FIRM (1/6/2017) (9)
+  - Base Flood Elevation (10)
+  - Cross Section Line (11)
+  - Cross Section - City Limits (2/28/2018) (12)
+  - Map Panel Number (13)
+  - Map Change (14)
+  - Flood Zone (15)
+  - Floodway (16)
+  - 100 Year AE Zone (17)
+  - 500 Year X Shaded (18)
+  - A Zone, No BFE (19)
+  - AO Zone, 1-3 Feet Depth (20)
+  - VE Coastal Hazard, BEF (21)
+  - Conveyance Zone (12/16/2016) (22)
+  - 500 WSEL (23)
+  - 500 Delta (24)
+- Effective (TSARP) Catchment (25)
+- Effective (TSARP) Watersheds (26)
+
+An API call to get an actual GEOJSON back is such:
+`https://cohgims.houstontx.gov/arcgis/rest/services/FloodplainDataFMO/MapServer/16/query?&where=objectid%3E0&f=geojson`
+
+The number before query in the URL is what will need to be changed to get a different layer back.
+
+*NOTE:* The site is normally a http site and not a https site. If you access the site through http, some methods of downloading the file will not work. It is best to:
+1. Put the https URL in your browser address bar. 
+2. Click "proceed anyways" when the scary notice about them not having a properly sit up https certificate comes up. 
+3. Download again. 
+
+You might not have the problem if you right click from the JSON content that appears on the page after you put the URL in the address bar. If you use CURL, you might not hav a problem. If you download using JavaScript embedded in a page, you will have the problem.
+
+### [Previous dataset...probably won't use this one] 500 Year Flood Plain Maps Houston Only
 https://data.houstontx.gov/sr_Latn/dataset/harris-county-flood-zones/resource/9219732c-d156-46a0-ba46-48c2976f876e
 
 https://cohgis-mycity.opendata.arcgis.com/datasets/788ac6b17c154be0ac72f2e7cde021f4_6/about
