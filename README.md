@@ -34,6 +34,19 @@ _The goal of this experiment is to see if location + text-to-speech can create a
 
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
 
+## First Pass Guessa at Hackathon Roles/Tasks
+- [non-code] Check performance of prototypes on multiple phone operating systems and browser makes if possible. 
+- [non-code] Check prototype behavior under different permission & security default settings. Figure out how to tell users what to change if necessary. 
+- [write javascript]Write code to load geojson files. 
+- [code: python, javascript, other] Potentially merge (or split?) separate geojson files to improve load performance. May require using browser inspector to figure out what is slowing load speeds.
+- [write javascript] Write javascript to calls turf.js to figure out if the coordinates of the user are in any of the polygons.
+- [write javascript]Write javascript to turn text into speech.
+- [non-code] Figure out what the application should say. 
+- [non-code] Figure out how often the application should say something 
+- etc. 
+- etc. 
+
+
 ## Data
 Tried a few places to find good floodplain & floodway geojson files specific to boundary of City of Houston or Harris County. 
 
