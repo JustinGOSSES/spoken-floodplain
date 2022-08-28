@@ -35,7 +35,9 @@ _The goal of this experiment is to see if location + text-to-speech can create a
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
 
 ## Data
-Tried a few places to find good floodplain & floodway geojson files specific to boundary of City of Houston or Harris County. Might do a write up eventually of things that don't work or bugs along the way in some of the datasets people might find via a web search. 
+Tried a few places to find good floodplain & floodway geojson files specific to boundary of City of Houston or Harris County. 
+
+Might do a write up eventually of things that don't work or bugs along the way in some of the datasets people might find via a web search. For now, this top option seems workable.
 
 
 ### City of Houston Geographic Information Management Service:
@@ -82,7 +84,7 @@ The number before query in the URL is what will need to be changed to get a diff
 
 You might not have the problem if you right click from the JSON content that appears on the page after you put the URL in the address bar. If you use CURL, you might not hav a problem. If you download using JavaScript embedded in a page, you will have the problem.
 
-### [Previous dataset...probably won't use this one] 500 Year Flood Plain Maps Houston Only
+<!-- ### [Previous dataset...probably won't use this one] 500 Year Flood Plain Maps Houston Only
 https://data.houstontx.gov/sr_Latn/dataset/harris-county-flood-zones/resource/9219732c-d156-46a0-ba46-48c2976f876e
 
 https://cohgis-mycity.opendata.arcgis.com/datasets/788ac6b17c154be0ac72f2e7cde021f4_6/about
@@ -96,7 +98,7 @@ Need the 100 year floodplains and the floodway maps as well.
 
 The size of 500 year floodplain geojson for Harris county is 91MB, which would make page load slow. Might need to dissolve into fewer number of features and then cut into smaller tile areas such that the whole thing doesn't have to load on page load but just a small area around the actual location of the user maybe?
 
-*Decided not to use this source as their API is broken for the floodway polygons.*
+*Decided not to use this source as their API is broken for the floodway polygons.* -->
 
 ## Web APIs
 Modern browsers enable location sharing through the Location Browser API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Location
