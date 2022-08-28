@@ -96,6 +96,8 @@ Need the 100 year floodplains and the floodway maps as well.
 
 The size of 500 year floodplain geojson for Harris county is 91MB, which would make page load slow. Might need to dissolve into fewer number of features and then cut into smaller tile areas such that the whole thing doesn't have to load on page load but just a small area around the actual location of the user maybe?
 
+*Decided not to use this source as their API is broken for the floodway polygons.*
+
 ## Web APIs
 Modern browsers enable location sharing through the Location Browser API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Location
 
