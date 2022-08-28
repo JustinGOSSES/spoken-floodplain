@@ -154,7 +154,7 @@ Sometimes people will have location sharing turned off in their browswer as they
 Due to the potential decisions made with this data, there will need to be a click through screen with a disclaimer like on other products with similar data.
 
 
-### Potential Variables
+### Potential Configuration Variables
 
 - How often location is checked
 - What information is provided to user as speech. 
