@@ -118,7 +118,7 @@ Location sharing and text-to-speech require the user to actively approve each ti
 - [Confirmed not an issue] Whether location sharing permission granting works only once or the entire time a page is loaded. 
   - Messed around in an Obserbable notebook. Once you give permission, looks like the web api for location can be set up to continuously gives location and speed and bearing are optional requests.
 
-## Privacy Concerns
+## Privacy Concerns to be Addressed in User Interface
 Sometimes people will have location sharing turned off in their browswer as they don't want to share location data. The page will need to tell people that 
 (1) this page won't actually share any of your location data, just use it locally on the page (2) let them know that they may see browser messages about sharing data as the browser is not able to tell the difference between (a) location data that is just used on the page on their device and (b) location data that is sent back to some server.
 
