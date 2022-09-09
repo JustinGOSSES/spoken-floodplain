@@ -28,10 +28,16 @@ The basics of this idea's user experience:
 - The user can keep driving and doesn't need to look at the website or interact with it. They just need to leave that page open on their device.
 
 ## Premise
+##### You already use maps & text-to-speech
 Map data is nearly always experienced in 2D geographic format. This, of course, makes sense and is best way for most uses. However, there are situations where other ways of experiencing the same information might make more sense. For example, when you're traveling in a car, you might not want to click on buttons or stare at a screen. For this reason, text-to-speech is a standard part of driving directions from your phone.
 
-When driving around looking at houses to potentially buy, the process of knowing if the house in front of you at that instant is in the flood plain isn't super smooth. Although there are websites that show the floodplain extent nicely, like https://www.harriscountyfemt.org/# , the site doesn't put your location on the map itself. If you're not familiar with the streets in question and where exactly you are, it can be difficult to locate yourself on the flood plain map quickly. Additionally, you have to look at the screen and squint at the map because it has a limited zoom functionality, which is likely not an option if you are the driver. 
+##### User need that generated the hackathon idea
+A past experience that helped inspire this idea was driving around looking at houses to potentially buy, the process of knowing if the house in front of you at that instant is in the flood plain isn't super smooth. 
 
+##### Limitations of existing services for those on the move
+Although there are websites that show the floodplain extent nicely, like https://www.harriscountyfemt.org/# , the site doesn't put your location on the map itself. If you're not familiar with the streets in question and where exactly you are, it can be difficult to locate yourself on the flood plain map quickly. Additionally, you have to look at the screen and squint at the map because it has a limited zoom functionality, which is likely not an option if you are the driver. 
+
+##### Summary of what is being combined into a single experience
 _The goal of this experiment is to see if location + text-to-speech can create a new way of experiencing where flood plains are located that is both less abstract and more in the average house shopers typical workflow._ 
 
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
