@@ -8,7 +8,7 @@ WHY BUILD THIS? => The idea is this would be a supplemental approach to the trad
 - (1) sitting at a computer and 
 - (2) looking at either looking at a whole city or a singular address. 
 
-_This is an experiment in taking floodplain information and providing it in a different way that changes how they experience it. There is a hypothesis here that if floodplain information is experienced while actually in a place, it changes how they process it compared to the same information represented later in an abstract map form._
+_This is an experiment in taking floodplain information and providing it in a different way that changes how people experience it. There is a hypothesis here that if floodplain information is experienced while actually in a place, it changes how people process it compared to the same information represented later in an abstract map form._
 
 SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/houston-hackathon-2022-registration-403212378077
 
