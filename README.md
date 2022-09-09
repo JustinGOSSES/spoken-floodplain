@@ -12,22 +12,6 @@ _This is an experiment in taking floodplain information and providing it in a di
 
 SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/houston-hackathon-2022-registration-403212378077
 
-## Summary of Hackathon Project Idea
-A website that tells a drive when they enter or leave a floodplain, so they don't have to look at a map probably made for desktops on a tiny phone.
-
-#### Potential Technology
-Reuses free & open data. No server necessary, all front-end. All technology capabilities necessary already exists. 
-
-- [browser capabilities to call]
-  - API for text-to-speech
-  - API for location sharing
-- [data] 
-  - Geojson of floodplains in Houston area
-- [JavaScript] 
-  - code to check if location inside of geojson's
-  - code to parse geojson properties and location relative information into text message
-  - code to control timing
-  - code for front-end user interface and optional map
 
 ## User Experience
 We could imagine the user is driving around during house shopping.
@@ -136,6 +120,21 @@ The size of 500 year floodplain geojson for Harris county is 91MB, which would m
 *Decided not to use this source as their API is broken for the floodway polygons.* -->
 
 ## Tools to be Used
+
+#### Potential Technology
+Reuses free & open data. No server necessary, all front-end. All technology capabilities necessary already exists. 
+
+- [browser capabilities to call]
+  - API for text-to-speech
+  - API for location sharing
+- [data] 
+  - Geojson of floodplains in Houston area
+- [JavaScript] 
+  - code to check if location inside of geojson's
+  - code to parse geojson properties and location relative information into text message
+  - code to control timing
+  - code for front-end user interface and optional map
+
 
 ### Browser Web APIs
 Modern browsers enable location sharing through the Location Browser API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Location
