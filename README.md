@@ -30,6 +30,8 @@ Reuses free & open data. No server necessary, all front-end. All technology capa
   - code for front-end user interface and optional map
 
 ## User Experience
+We could imagine the user is driving around during house shopping.
+
 The basics of this idea's user experience: 
 - The user is the driver of the car or rider of bicycle.
 - The user opens the website
