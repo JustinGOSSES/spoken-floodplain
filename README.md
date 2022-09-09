@@ -38,7 +38,7 @@ A past experience that helped inspire this idea was driving around looking at ho
 Although there are websites that show the floodplain extent nicely, like https://www.harriscountyfemt.org/# , the site doesn't put your location on the map itself. If you're not familiar with the streets in question and where exactly you are, it can be difficult to locate yourself on the flood plain map quickly. Additionally, you have to look at the screen and squint at the map because it has a limited zoom functionality, which is likely not an option if you are the driver. 
 
 ##### Summary of what is being combined into a single experience
-_The goal of this experiment is to see if location + text-to-speech can create a new way of experiencing where flood plains are located that is both less abstract and more in the average house shopers typical workflow._ 
+_The goal of this experiment is to see if location + text-to-speech services already built into any browser can create a new way of experiencing where flood plains are located that is both less abstract and more in the average house shoppers typical workflow._ 
 
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
 
