@@ -28,6 +28,7 @@ The basics of this idea's user experience:
   - NOTE: The website is front-end only, so it doesn't actually send any user data anywhere. However, this permission must still be given. 
 - The website, after permissions are granted, checks the user's location and verbally says whether it is inside a floodplain boundary every X unit of time as configured and/or the direction and distance of the nearest floodplain. 
 - The user can keep driving and doesn't need to look at the website or interact with it. They just need to leave that page open on their device and keep listening.
+  - The user then experiments information about floodplain while being directly in a place instead of attaching that information to a previous memory via an abstract map. 
 
 ## Premise
 ##### You already use maps & text-to-speech
