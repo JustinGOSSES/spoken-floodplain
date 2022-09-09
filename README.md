@@ -17,7 +17,6 @@ A website that tells a drive when they enter or leave a floodplain, so they don'
 - Geojson of floodplains in Houston area
 - JavaScript code to check if location inside of geojson's
 - JavaScript code to parse geojson properties and location relative information into text message
-- JavaScript to turn text to speech
 - JavaScript to control timing
 - JavaScript, CSS, and HTML for front-end user interface and optional map
 
