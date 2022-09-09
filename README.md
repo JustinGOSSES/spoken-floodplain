@@ -1,6 +1,8 @@
 # houston-hackathon-spoken-floodplain
 
-Placeholder for a potential houston hackathon project about website that verbally tells users when they enter or leave a floodplain as a supplemental approach to the traditional maps geared to users on the move.
+Placeholder for a potential houston hackathon project about website that verbally tells users when they enter or leave a floodplain as they are on the move. 
+
+The idea is this would be a supplemental approach to the traditional floodplain maps that are typically experienced (1) sitting at a computer and (2) looking at either looking at a whole city or a singular address.
 
 SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/houston-hackathon-2022-registration-403212378077
 
