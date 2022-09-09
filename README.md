@@ -4,7 +4,7 @@ Placeholder for a potential houston hackathon project that is...
 
 <b>A website that _verbally_ tells users when they enter or leave a floodplain as they are ON THE MOVE.</b>
 
-The idea is this would be a supplemental approach to the traditional floodplain maps that are typically experienced through websites that assume users are:
+WHY BUILD THIS? => The idea is this would be a supplemental approach to the traditional floodplain maps that are typically experienced through websites that assume users are:
 - (1) sitting at a computer and 
 - (2) looking at either looking at a whole city or a singular address. 
 
