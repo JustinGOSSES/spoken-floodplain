@@ -21,13 +21,14 @@ A website that tells a drive when they enter or leave a floodplain, so they don'
 - JavaScript to control timing
 - JavaScript, CSS, and HTML for front-end user interface and optional map
 
-#### User Experience
+## User Experience
 The basics of this idea's user experience: 
 - The user is the driver of the car or rider of bicycle.
-- The user clicks to share with the page location and speaker permissions at start, probably when not driving.
-- The website is front-end only, so it doesn't actually send any user data anywhere. However, this permission must still be given for it to work.
+- The user opens the website
+- The user clicks to give permission to share their device's location and speaker permissions upon opening the page, probably when not driving.
+  - NOTE: The website is front-end only, so it doesn't actually send any user data anywhere. However, this permission must still be given. 
 - The website, after permissions are granted, checks the user's location and verbally says whether it is inside a floodplain boundary every X unit of time as configured and/or the direction and distance of the nearest floodplain. 
-- The user can keep driving and doesn't need to look at the website or interact with it. They just need to leave that page open on their device.
+- The user can keep driving and doesn't need to look at the website or interact with it. They just need to leave that page open on their device and keep listening.
 
 ## Premise
 ##### You already use maps & text-to-speech
