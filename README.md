@@ -16,15 +16,18 @@ SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/h
 A website that tells a drive when they enter or leave a floodplain, so they don't have to look at a map probably made for desktops on a tiny phone.
 
 #### Potential Technology
-Reuses free & open data. All technology capabilities necessary already exists. No server necessary, all front-end.
+Reuses free & open data. No server necessary, all front-end. All technology capabilities necessary already exists. 
 
-- Browser Web API for text-to-speech
-- Browser Web API for location sharing
-- Geojson of floodplains in Houston area
-- JavaScript code to check if location inside of geojson's
-- JavaScript code to parse geojson properties and location relative information into text message
-- JavaScript to control timing
-- JavaScript, CSS, and HTML for front-end user interface and optional map
+- [browser capabilities to call]
+  - API for text-to-speech
+  - API for location sharing
+- [data] 
+  - Geojson of floodplains in Houston area
+- [JavaScript] 
+  - code to check if location inside of geojson's
+  - code to parse geojson properties and location relative information into text message
+  - code to control timing
+  - code for front-end user interface and optional map
 
 ## User Experience
 The basics of this idea's user experience: 
