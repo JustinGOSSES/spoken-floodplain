@@ -8,7 +8,7 @@ The idea is this would be a supplemental approach to the traditional floodplain 
 - (1) sitting at a computer and 
 - (2) looking at either looking at a whole city or a singular address. 
 
-_This is an experiment in providing information that people are familiar with in a different way that changes how they experience it._
+_This is an experiment in taking information that people are familiar with and providing it in a different way that changes how they experience it._
 
 SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/houston-hackathon-2022-registration-403212378077
 
