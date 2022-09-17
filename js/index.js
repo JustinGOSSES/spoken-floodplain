@@ -38,6 +38,7 @@ let config = {
 
   })
     .then(function (response) {
+      console.log('Error parsing JSON from response:', response); 
       return response.json();
     })
     .then(function (data) {
