@@ -5,6 +5,7 @@
 
 /////////////////////////////////
 
+var dataGlobal = [-95.498,29.7604]
 
 // config map
 let config = {
@@ -52,10 +53,12 @@ let config = {
     })
     .then(function (data) {
       // use geoJSON
+      dataGlobal = data
       console.log('data', data); 
       L.geoJSON(data, {
         onEachFeature: onEachFeature,
       }).addTo(map);
+      searchWithinPolygonsForPoint(data)
     });
 
 function addFeatureToMap(data){
@@ -78,9 +81,11 @@ function getLocation(x) {
 
 function showPosition(position) {
   map.setView([position.coords.latitude, position.coords.longitude], 15)
+  turfPoint = turf.point([position.coords.longitude,position.coords.latitude]);
+  let working = new SpeechSynthesisUtterance("Your location is ."+Math.round(position.coords.latitude)+" latitude and"+Math.round(position.coords.longitude)+" longitudes"); 
+    window.speechSynthesis.speak(working);
   document.getElementById("location").innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
 }
-
 
 function showError(error) {
   switch(error.code) {
@@ -99,3 +104,34 @@ function showError(error) {
   }
 }
 
+////////// TURF CODE
+
+var turfPoint = turf.point([-95.498,29.7604]);
+
+function searchWithinPolygonsForPoint(Polygons){
+  console.log("turfPoint",turfPoint)
+  //turfPoint
+  //polygon
+  ////
+  //var pointsFP = turf.points([[-95.380911,29.815999]]);
+  var dataGlobal = [-95.498,29.7604]
+  var pointsFP = turf.points([dataGlobal]);
+
+  var temp_point_in_floodplain = []
+  var numberPolygons = Polygons.features.length
+  console.log("number of polygons",numberPolygons)
+  console.log('Polygons.features 0',Polygons.features[0])
+  for (let i = 0; i < numberPolygons; i++) {
+    //console.log("Polygons.features",Polygons.features[0].geometry.coordinates)
+    var searchWithin = turf.polygon(Polygons.features[0].geometry.coordinates);
+    // var searchWithin = await turf.multiPolygon(Polygons.features.geometry.coordinates);
+    var ptsWithin = turf.pointsWithinPolygon(pointsFP, searchWithin);
+    if(ptsWithin.features.length != 0){
+      console.log("location is within this polyon",ptsWithin);
+    }
+    // console.log("ptsWithin",ptsWithin);
+  }
+  // var searchWithin = turf.multiPolygon(Polygons.features.geometry.coordinates);
+  // var ptsWithin = turf.pointsWithinPolygon(pointsFP, searchWithin);
+  // console.log("ptsWithin",ptsWithin);
+}
