@@ -3,6 +3,9 @@
  * geoJSON simple
  */
 
+/////////////////////////////////
+
+
 // config map
 let config = {
     minZoom: 2,
@@ -65,13 +68,16 @@ function addFeatureToMap(data){
 
 function getLocation(x) {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition,x);
+    navigator.geolocation.getCurrentPosition(showPosition);
+
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
-function showPosition(position,x) {
+
+function showPosition(position) {
+  map.setView([position.coords.latitude, position.coords.longitude], 15)
   document.getElementById("location").innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
 }
 
