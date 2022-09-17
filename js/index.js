@@ -39,12 +39,56 @@ let config = {
   })
     .then(function (response) {
       console.log('Error parsing JSON from response:', response); 
-      return response.json();
+      //var data = response.json()
+      //console.log('data early, json :', data);
+      // await addFeatureToMap(data) 
+      setTimeout(function() {
+        addFeatureToMap(response.json()) ;
+      }, 1000);
+      // return response.json();
     })
-    .then(function (data) {
-      // use geoJSON
-      console.log('data', data); 
+    // .then(function (data) {
+    //   // use geoJSON
+    //   console.log('data', data); 
+    //   L.geoJSON(data, {
+    //     onEachFeature: onEachFeature,
+    //   }).addTo(map);
+    // });
+
+function addFeatureToMap(data){
+  console.log('data', data); 
       L.geoJSON(data, {
         onEachFeature: onEachFeature,
       }).addTo(map);
-    });
+}
+
+
+// function getLocation(x) {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(showPosition,x);
+//   } else {
+//     x.innerHTML = "Geolocation is not supported by this browser.";
+//   }
+// }
+
+// function showPosition(position,x) {
+//   document.getElementById("location").innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+// }
+
+
+// function showError(error) {
+//   switch(error.code) {
+//     case error.PERMISSION_DENIED:
+//       x.innerHTML = "User denied the request for Geolocation."
+//       break;
+//     case error.POSITION_UNAVAILABLE:
+//       x.innerHTML = "Location information is unavailable."
+//       break;
+//     case error.TIMEOUT:
+//       x.innerHTML = "The request to get user location timed out."
+//       break;
+//     case error.UNKNOWN_ERROR:
+//       x.innerHTML = "An unknown error occurred."
+//       break;
+//   }
+// }
