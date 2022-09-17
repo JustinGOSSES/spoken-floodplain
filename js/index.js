@@ -43,6 +43,7 @@ let config = {
     })
     .then(function (data) {
       // use geoJSON
+      console.log('data', data); 
       L.geoJSON(data, {
         onEachFeature: onEachFeature,
       }).addTo(map);
