@@ -41,14 +41,20 @@ _The goal of this experiment is to see if location + text-to-speech services alr
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
 
 ## First Pass Guess at Hackathon Roles/Tasks
-- [non-code] Check performance of prototypes on multiple phone operating systems and browser makes if possible. 
-- [non-code] Check prototype behavior under different permission & security default settings. Figure out how to tell users what to change if necessary. 
-- [write javascript]Write code to load geojson files. 
+#### Involves Writing Code
 - [code: python, javascript, other] Potentially merge (or split?) separate geojson files to improve load performance. May require using browser inspector to figure out what is slowing load speeds.
 - [write javascript] Write javascript to calls turf.js to figure out if the coordinates of the user are in any of the polygons.
 - [write javascript]Write javascript to turn text into speech.
+### Does not Involve Writing Code
+- [non-code] Creates slides for presentations following [template](https://docs.google.com/presentation/d/10SQOx-6oWlolidW6kMj2MmJEOGUMokADWDysCIh-dNs/edit#slide=id.gab2a44e39f_0_17): 
+#### User Work
+- [non-code] Writes up user personas
 - [non-code] Figure out what the application should say. 
 - [non-code] Figure out how often the application should say something 
+- [non-code] Check prototype behavior under different permission & security default settings. Figure out how to tell users what to change if necessary. 
+- [write javascript]Write code to load geojson files. 
+- [non-code] Check performance of prototypes on multiple phone operating systems and browser makes if possible. 
+
 - etc. 
 
 ## Data
