@@ -7,6 +7,10 @@ var dataGlobal = [-95.498,29.7604]
 var polygons = ""
 var isLocationWithinOneFloodplainPolygon = false
 var introductionSpeechSaid = false
+var timeIntervalTriggered = false
+var locationState = "noneYet" //// outsideFloodplain, floodplain500yr, floodplain100yr, floodway
+var interval = ""
+var sayLocationInLatLong = false
 
 // config map
 let config = {
@@ -73,20 +77,44 @@ function addFeatureToMap(data){
 
 function getLocation(x) {
   if (navigator.geolocation) {
-    $('#trigger').trigger('click')
+    // $('#trigger').trigger('click')
     //// This calls the function showPosition with an argument of the position of the device.
     //// We'll assume that the geojson polygons is already loaded.
-    navigator.geolocation.getCurrentPosition(showPosition);
+    console.log("got into getLocation function before checking if introductionSpeechSaid == false")
     if(introductionSpeechSaid == false){
-      let introSpeak= new SpeechSynthesisUtterance("Location based services activated. If you do not want to be asked again, be sure to click the remember this decision checkmark."); 
+      console.log("got into getLocation function and introductionSpeechSaid == false")     
+      let introSpeak= new SpeechSynthesisUtterance("Location based services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
       window.speechSynthesis.speak(introSpeak);
       introductionSpeechSaid = true
+      startCheckingLocationEveryInterval()
+      console.log("startCheckingLocationEveryInterval() on line above")
+      console.log("timeIntervalTriggered is set to:",timeIntervalTriggered)
+      timeIntervalTriggered = true
+      console.log("timeIntervalTriggered is set to:",timeIntervalTriggered)
+    }
+    else{
+      console.log("got into getLocation function and introductionSpeechSaid != false.")
+      if(timeIntervalTriggered != false){
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }
+      else{
+        console.log("got here? shouldn't get here")
+      }
     }
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
+function stopSpeechUtteranceAndLoop(){
+  clearInterval(interval)
+  console.log("used stopSpeechUtteranceAndLoop() function to cleare interval")
+  timeIntervalTriggered = false
+  introductionSpeechSaid = false
+  console.log("used stopSpeechUtteranceAndLoop() function to set timeIntervalTriggered = false and introductionSpeechSaid = false")
+  speechSynthesis.cancel()
+  console.log("used stopSpeechUtteranceAndLoop() function to call speechSynthesis.cancel()")
+}
 
 function showPosition(position) {
   //// This resets the center of the map based on the location position from the device.
@@ -94,8 +122,10 @@ function showPosition(position) {
   //// Creates a turf point from the position location coordinates.
   turfPoints = turf.points([[position.coords.longitude,position.coords.latitude]]);
   //// This calls the text to speech capabilities of the browser and says the location
-  let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
+  if(sayLocationInLatLong){
+    let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
     window.speechSynthesis.speak(currentLocationSpeak);
+  }
   //// This updates the position on the HTML page.
   document.getElementById("location").innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
   //// Add marker for location point onto map:
@@ -152,4 +182,20 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
   ; 
 }
 
-const interval = setInterval(function() {getLocation();}, 20000)
+function checkLocationStateAndUpdate(){
+  //// checks if current state and past state are different.
+
+  //// if states are different, do nothing
+
+  //// if states different
+
+  ///// then say new location state
+
+  ///// then update new state in variable
+  return ""
+}
+
+function startCheckingLocationEveryInterval(){
+  interval = setInterval(function() {getLocation();}, 20000)
+}
+

@@ -29,6 +29,9 @@
         <div class="row">
             <div class="col text-center">
                 <button class="btn" onclick="getLocation()"><i class="glyphicon glyphicon-map-marker"></i>Start Location and Speech-based Services</button>
+                <button class="btn" onclick="stopSpeechUtteranceAndLoop()"><i class="glyphicon glyphicon-map-marker"></i>Stop Speech</button>
+
+                
             </div>
         </div>
         <br><br>
@@ -38,9 +41,99 @@
     </div>
 
     <div class="container">
-        <h1>Information about Floodplains</h1>
+        <h1>How to Use this Website</h1>
+        <h4>This website is meant to supply SPOKEN floodplain information while ON THE MOVE!</b>
+        </h4>
+        <p>
+            While other floodplain maps listed below are best used sitting at home in front of a computer, 
+            this service is meant to be used while in a car or on a bike. 
+            People can be told when they enter or leave a floodplain without
+            having to actively interact with a device by clicking through many screens and typing in addresses.
+        </p>
+        <h4>Why Listen to Floodplain Information?</h4>
+        <p><a href='https://www.bloomberg.com/news/articles/2022-09-12/real-estate-listings-with-flood-scores-shift-home-shopper-habits?sref=fRZXrT1O'>Studies</a> have shown 
+            that putting floodplain information inside home buyers workflows change how they percieve the information and changes their home 
+            purchasing behavior. </p>
+        <p>
+            This website is based on the hypothesis that changing how and when people experience floodplain information may change their purchasing behavior.
+        </p>
+            <ol>
+                <li>Change <i>how</i> you experience floodplain information:
+                    <uL>
+                        <li>from... an abstract map </li>
+                        <li>to... information experienced in real-time while physically experiencing a place. </li>
+                    </uL>
+                </li>
+                <li>Change <i>when</i> you experience floodplain information:
+                    <uL>
+                        <li>from... separate in time from looking at a house and potentially days later. </li>
+                        <li>to... information experienced in real-time and potentially even before you see a house. </li>
+                    </uL>
+                </li>
+            </oL>   
+        <p>
+            Avoid falling in love with a house and then have to argue yourself out of that decision once you learn it is in a floodplain or even a floodway.
+        </p>
+        <h1>Disclaimer</h1>
+        <p><i>This website is is not suitable for legal, engineering, surveying, or property purchase purposes.</i></p>
+        <p>Please visit FEMA's Map Service Center at <a href="https://www.fema.gov/flood-maps">https://www.fema.gov/flood-maps</a> to view the effective FIRM for Harris County. 
+            For an official floodplain determination, please contact an insurance agent or mortgage lender.</p>
+        <p>This map is a representation and approximation of the relative location of geographic information, land marks and physical addresses. 
+            This floodplain polygons were exported at a specific moment in time in September 2022 based on 2019 tentative FEMA FIRMs. 
+            FEMA floodplain maps evolve over time. 
+            Additionally, as the climate changes, FEMA floodplain maps are increasingly out of date. 
+            Finally, the data for your location comes from your device, which has uncertainty as well. 
+            Please check specific addresses against FEMA floodplain maps anytime you need accurate information. 
+            Do not rely on this application for accurate information or make any decisions on the basis of information provided by it! </p>
+        <p>Flooding is not limited to floodplains. 
+            Many Harris County areas outside floodplains got flooding damage during Hurrican Harvey.</p>
+       
+        <hr/>
+        
+        <h3>Other Floodplain Resources</h3>
+        <p>
+            Other floodplain maps focus on serving users who are sitting at a computer and looking up information for a single address. 
+            This map is a supplement to these other map experiences.
+        </p>
+        <h4>Harris County Flood Control District Interactive Flood Mapping Tool</h4>
+            - <a href="https://www.hcfcd.org/Resources/Interactive-Mapping-Tools/Harris-County-Flood-Education">Link to Harris County Flood Control District Interactive Flood Mapping Tools</a>
+            <h5>Benefits:</h5>
+            <ul>
+                <li>Good for looking up a specific address</li>
+                <li>Tied to other information for understanding flood risks specific to Harris County, Texas.</li>
+            </ul>
+            <h5>Disadvantages:</h5>
+            <ul>
+                <li>Distracting to try to use while driving.</li>
+                <li>Limited to Harris County only</li>
+                <li>Hard to tell where you are on the map at any given time if you don't have an address as users can not zoom all the way in and there is no location sharing with the map.</li>
+            </ul>
+        <h4>FEMA</h4>
+            <ul>
+                <li>
+                    <a href="https://www.fema.gov/flood-maps">FEMA Floodplain FIRMs PDFs</a>
+                </li>
+                <li>
+                    <a href="https://www.fema.gov/flood-maps">FEMA Interactive Floodplain Address Based Search Map</a>
+                </li>
+            </ul>
+        <h5>Benefits:</h5>
+        <ul>
+            <li>Good for looking up a specific address</li>
+            <li>FEMA FIRMS form the basis of whether a property is in the floodplain or floodway for legal and insurance purposes.</li>
+        </ul>
+        <h5>Disadvantages:</h5>
+        <ul>
+            <li>Distracting to try to use while driving.</li>
+            <li>Hard to find an interactive map on their site.</li>
+            <li>Hard to tell where you are on the map at any given time if you don't have an address map does not know your device's location.</li>
+        </ul>
+        <hr/>
 
-        <h2>Harris County Floodplain</h2>
+        <h2>Information about Floodplains</h2>
+        <p>This information is from <a href="https://www.eng.hctx.net/Consultants/Floodplain-Management/Floodplain-Information">Harris County Engineering Department</a>.</p>
+        
+        <!-- <h3>Harris County Floodplain</h3> -->
 
         <p>
             Harris County is the third largest county in the United States with a population greater than three million.
@@ -49,7 +142,6 @@
             century, over 30 thunderstorms, tropical storms, and hurricanes have caused flooding in Harris County. Each
             bayou and creek include areas known as "floodplains," where water collects, pools, and flows during the
             course of a natural storm event. </p>
-
         <p>
             A floodplain is defined as any land area susceptible to being inundated by water from any source. These
             areas are classified as Special Flood Hazard Areas (SFHA), and are located in a 100-year flood zone. The
@@ -57,28 +149,13 @@
             it is the flood elevation that has a 1- percent chance of being equaled or exceeded each year. Harris County
             has Flood Insurance Rate Maps (FIRM) that identify all floodplain areas within the county limits. </p>
 
-        <p>
-            County strives to protect the natural and beneficial functions of floodplain areas. Harris County has
-            some unique situations. After devastating flooding in 1935, the state legislature created the Harris County
-            Flood Control District (HCFCD). As stated in the Flood Insurance Study, HCFCD governs drainage and flood
-            control, while the county engineer governs floodplain management and permit programs with technical
-            assistance from HCFCD. Although both agencies are under the jurisdiction of Commissioners’ Court, they are
-            separate agencies. In 2003, Harris County Commissioners’ Court adopted the Draft Floodplain Management Plan
-            for qualification to participate in the National Flood Insurance Program’s (NFIP) Community Rating System
-            (CRS). </p>
-
-
         <p>Floods are one of the most common hazards in the United States. Flood effects can be local, impacting a
             neighborhood or community, or very large, affecting entire river basins and multiple states. It is important
             to be aware of flood hazards no matter where you live. Even very small streams, gullies, creeks, culverts,
             dry streambeds, or low-lying ground that appears harmless in dry weather can flood.</p>
 
+        <h4>Risk</h4>
 
-        <h2>Flood Facts</h2>
-
-        <h3>Risk</h3>
-
-        <p>
             <ul>
                 <li>Floods are the #1 natural disaster in the United States.</li>
                 <li>Just an inch of water can cause costly damage to property. As little as six inches of moving water
@@ -96,7 +173,7 @@
                     of a 30-year mortgage, compared to a nine percent chance of experiencing a fire.</li>
             </ul>
 
-            <h3>Impact</h3>
+        <h4>Impact</h4>
 
             <ul>
                 <li>Flood losses in the United States averaged $2.4 billion per year for the last decade.</li>
@@ -109,7 +186,21 @@
                 <li>Nearly 75 percent of all federally declared disasters over the past five years involved flooding.
                 </li>
             </ul>
+
+
         </p>
+        <h2>Feedback</h2>
+        <p>This website is a front-end only website whose code lives in 
+            <a href="https://justingosses.github.io/spoken-floodplain/">this code repository</a>.
+            Please flag code related problems and make any changes requests via an issue or pull request on the repository.
+        </p>
+        <p>Please let us know if you use the website. We are desparate for feedback from users. 
+            You can supply user feedback as described <a href="https://github.com/JustinGOSSES/spoken-floodplain/issues/5">here</a>.</p>
+        <h2>Privacy</h2>
+            <p>When your device shares your specific location, that is only used with the JavaScript used on your device. 
+                It is not sent to a server. Your IP will tracked on a temporary basis via Google Analytics, so we can understand how many people 
+                are using this service.
+            </p>
     </div>
 
 </body>
