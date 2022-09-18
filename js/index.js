@@ -6,6 +6,7 @@
 var dataGlobal = [-95.498,29.7604]
 var polygons = ""
 var isLocationWithinOneFloodplainPolygon = false
+var introductionSpeechSaid = false
 
 // config map
 let config = {
@@ -76,8 +77,11 @@ function getLocation(x) {
     //// This calls the function showPosition with an argument of the position of the device.
     //// We'll assume that the geojson polygons is already loaded.
     navigator.geolocation.getCurrentPosition(showPosition);
-    let introSpeak= new SpeechSynthesisUtterance("Location based services activated. If you do not want to be asked again, be sure to click the remember this decision checkmark."); 
-    window.speechSynthesis.speak(introSpeak);
+    if(introductionSpeechSaid == false){
+      let introSpeak= new SpeechSynthesisUtterance("Location based services activated. If you do not want to be asked again, be sure to click the remember this decision checkmark."); 
+      window.speechSynthesis.speak(introSpeak);
+      introductionSpeechSaid = true
+    }
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
@@ -145,8 +149,7 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
     let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
     window.speechSynthesis.speak(notWithinFloodplainSpeak);
   }
-  ;
-  
+  ; 
 }
 
-const interval = setInterval(function() {getLocation();}, 10000)
+const interval = setInterval(function() {getLocation();}, 20000)
