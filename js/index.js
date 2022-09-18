@@ -1,8 +1,3 @@
-/* eslint-disable no-undef */
-/**
- * geoJSON simple
- */
-
 /////////////////////////////////
 
 
