@@ -72,9 +72,12 @@ function addFeatureToMap(data){
 
 function getLocation(x) {
   if (navigator.geolocation) {
+    $('#trigger').trigger('click')
     //// This calls the function showPosition with an argument of the position of the device.
     //// We'll assume that the geojson polygons is already loaded.
     navigator.geolocation.getCurrentPosition(showPosition);
+    let introSpeak= new SpeechSynthesisUtterance("Location based services activated. If you do not want to be asked again, be sure to click the remember this decision checkmark."); 
+    window.speechSynthesis.speak(introSpeak);
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
@@ -87,7 +90,7 @@ function showPosition(position) {
   //// Creates a turf point from the position location coordinates.
   turfPoints = turf.points([[position.coords.longitude,position.coords.latitude]]);
   //// This calls the text to speech capabilities of the browser and says the location
-  let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is ."+Math.round(position.coords.latitude)+" latitude and"+Math.round(position.coords.longitude)+" longitudes"); 
+  let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
     window.speechSynthesis.speak(currentLocationSpeak);
   //// This updates the position on the HTML page.
   document.getElementById("location").innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
