@@ -34,7 +34,9 @@ let config = {
   
   // adding geojson by fetch
   // of course you can use jquery, axios etc.
-  fetch("./data/created_data/FEMA_FIRM_FloodPolygons_forDisplay_fromNFHL_exported2022_09.geojson", {
+  //fetch("./data/created_data/FEMA_FIRM_FloodPolygons_forDisplay_fromNFHL_exported2022_09.geojson", {
+  fetch("./data/FEMA_FIRM_FloodPolygons.json", {
+    
     headers : { 
       // 'Content-Type': 'application/json',
       // 'Accept': 'application/json'
@@ -43,13 +45,13 @@ let config = {
   })
     .then(function (response) {
       console.log('response message:', response); 
-      //var data = response.json()
+      var data = response.json()
       //console.log('data early, json :', data);
       // await addFeatureToMap(data) 
       // setTimeout(function(data) {
       //   return addFeatureToMap(data) ;
       // }, 10000);
-      return response.json();
+      return data;
     })
     .then(function (data) {
       // use geoJSON
