@@ -165,7 +165,7 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
   var numberPolygons = Polygons.features.length
   console.log("number of polygons",numberPolygons)
   console.log('Polygons.features 0',Polygons.features[0])
-  var newLocationState = ""
+  var newLocationState = "unknown"
   for (let i = 0; i < numberPolygons; i++) {
     var searchWithin = turf.polygon(Polygons.features[0].geometry.coordinates);
     var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
@@ -176,10 +176,10 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
     }
     else{
       newLocationState = "outside"
-      console.log("new location is within this polyon",ptsWithin);
+      // console.log("new location is within this polyon",ptsWithin);
     }
   }
-  checkLocationStateAndUpdate(isLocationWithinOneFloodplainPolygon,newLocationState)
+  checkLocationStateAndUpdate(newLocationState)
   // if (isLocationWithinOneFloodplainPolygon == true){
   //   let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
   //   window.speechSynthesis.speak(withinFloodplainSpeak);
@@ -188,11 +188,12 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
   //   let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
   //   window.speechSynthesis.speak(notWithinFloodplainSpeak);
   // }
-  ; 
+  //; 
 }
 
-function checkLocationStateAndUpdate(isLocationWithinOneFloodplainPolygon,newLocationState){
+function checkLocationStateAndUpdate(newLocationState){
   //// checks if current state and past state are different.
+  //console.log("comparison",isLocationWithinOneFloodplainPolygon.localeCompare(newLocationState))
   if(newLocationState == isLocationWithinOneFloodplainPolygon){
      //// if states are same, do nothing
     console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
@@ -214,10 +215,6 @@ function checkLocationStateAndUpdate(isLocationWithinOneFloodplainPolygon,newLoc
     ///// then update new state in variablew location state
     
   }
-
-  
-
-  
   return ""
 }
 
