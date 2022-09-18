@@ -1,1 +1,8 @@
-#map { height: 40rem; }
+#map { 
+    height: 40rem; }
+    
+#header, #location, #btn { text-align: center; }
+
+
+
+

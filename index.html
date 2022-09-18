@@ -1,27 +1,116 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>title</title>
+    <meta name="viewport" content="width=device-width">
+    <title>Spoken Floodplain</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-    crossorigin=""/>
+        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+        crossorigin="" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
-    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-    crossorigin=""></script>
+        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+        crossorigin=""></script>
     <script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
-     
-    <link rel="stylesheet" href="css/main.css"/>
+
+    <link rel="stylesheet" href="css/main.css" />
 
 </head>
+
 <body>
-    <h1>test of data loading limitations</h1>
-    <button onclick="getLocation()">Access Your Location</button>
-    <div id="location"></div>
-    <div id="map"></div>
-    <h1>For Entertainment Purposes Only</h1>
+    <div class="container">
+        <h1 id="header">Spoken Floodplain</h1>
+        <br>
+        <button class="btn" onclick="getLocation()"><i class="glyphicon glyphicon-map-marker"></i>Access Your
+            Location</button>
+
+        <br><br>
+        <div id="location"></div>
+        <br>
+        <div id="map"></div>
+    </div>
+
+    <div class="container">
+        <h1>Information about Floodplains</h1>
+
+        <h2>Harris County Floodplain</h2>
+
+        <p>
+            Harris County is the third largest county in the United States with a population greater than three million.
+            It covers 1,788 square miles with 1,500 channels totaling about 2,500 miles in length within twenty-two
+            watersheds. The land use consists of urban, residential, commercial, and heavy industrial areas. In the last
+            century, over 30 thunderstorms, tropical storms, and hurricanes have caused flooding in Harris County. Each
+            bayou and creek include areas known as "floodplains," where water collects, pools, and flows during the
+            course of a natural storm event. </p>
+
+        <p>
+            A floodplain is defined as any land area susceptible to being inundated by water from any source. These
+            areas are classified as Special Flood Hazard Areas (SFHA), and are located in a 100-year flood zone. The
+            term "100-year flood" can be misleading. It does not mean that the flood will occur every 100 years; rather
+            it is the flood elevation that has a 1- percent chance of being equaled or exceeded each year. Harris County
+            has Flood Insurance Rate Maps (FIRM) that identify all floodplain areas within the county limits. </p>
+
+        <p>
+            County strives to protect the natural and beneficial functions of floodplain areas. Harris County has
+            some unique situations. After devastating flooding in 1935, the state legislature created the Harris County
+            Flood Control District (HCFCD). As stated in the Flood Insurance Study, HCFCD governs drainage and flood
+            control, while the county engineer governs floodplain management and permit programs with technical
+            assistance from HCFCD. Although both agencies are under the jurisdiction of Commissioners’ Court, they are
+            separate agencies. In 2003, Harris County Commissioners’ Court adopted the Draft Floodplain Management Plan
+            for qualification to participate in the National Flood Insurance Program’s (NFIP) Community Rating System
+            (CRS).
+        </p>
+
+
+        <p>Floods are one of the most common hazards in the United States. Flood effects can be local, impacting a
+            neighborhood or community, or very large, affecting entire river basins and multiple states. It is important
+            to be aware of flood hazards no matter where you live. Even very small streams, gullies, creeks, culverts,
+            dry streambeds, or low-lying ground that appears harmless in dry weather can flood.</p>
+
+        <p>
+            <h2>Flood Facts</h2>
+
+            <h3>Risk</h3>
+
+            <ul>
+                <li>Floods are the #1 natural disaster in the United States.</li>
+                <li>Just an inch of water can cause costly damage to property. As little as six inches of moving water
+                    can knock you off your feet or move your car.</li>
+                <li>Most homeowners insurance doesn't cover flood damage.</li>
+                <li>More than 50 percent of properties in high-risk areas remain unprotected by flood insurance; all
+                    properties in high-risk areas need to be protected with flood insurance.</li>
+                <li>Between 20 and 25 percent of all flood insurance claims are filed in low-to moderate-risk areas.
+                </li>
+                <li>New construction can increase flood risk, especially if it changes natural runoff paths.</li>
+                <li>More than 5 million Americans are protected with flood insurance but millions more are unaware of
+                    their personal risk for property damage or options for protection.</li>
+                <li>For building in high flood risk areas, there is a 26 percent chance of experiencing a flood during
+                    the life
+                    of a 30-year mortgage, compared to a nine percent chance of experiencing a fire.</li>
+            </ul>
+
+            <h3>Impact</h3>
+
+            <ul>
+                <li>Flood losses in the United States averaged $2.4 billion per year for the last decade.</li>
+                <li>The National Flood Insurance Program (NFIP) has paid nearly $16 billion in flood insurance claims to
+                    policyholders during the 2005 hurricane season (as of August 31, 2006.)</li>
+                <li>Federal disaster assistance is usually a loan that must be paid back with interest and is only
+                    available when a disaster has been federally declared.</li>
+                <li>In the last 52 years, nearly 1,000 flood events have been designated as federally declared
+                    disasters.</li>
+                <li>Nearly 75 percent of all federally declared disasters over the past five years involved flooding.
+                </li>
+            </ul>
+        </p>
+    </div>
+
 </body>
-<script src="js/index.js"></script>  
+<script src="js/index.js"></script>
+
 </html>
