@@ -142,4 +142,8 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
     let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
     window.speechSynthesis.speak(notWithinFloodplainSpeak);
   }
+  ;
+  
 }
+
+const interval = setInterval(function() {getLocation();}, 10000)
