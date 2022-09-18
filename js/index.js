@@ -197,6 +197,7 @@ function checkLocationStateAndUpdate(newLocationState){
   if(newLocationState == isLocationWithinOneFloodplainPolygon){
      //// if states are same, do nothing
     console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
+    console.log("This measn no change in location state, which is: ",isLocationWithinOneFloodplainPolygon, "floodplain.")
   }
   //// if states different
   else{
@@ -219,6 +220,6 @@ function checkLocationStateAndUpdate(newLocationState){
 }
 
 function startCheckingLocationEveryInterval(){
-  interval = setInterval(function() {getLocation();}, 20000)
+  interval = setInterval(function() {getLocation();}, 5000)
 }
 
