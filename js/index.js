@@ -8,7 +8,7 @@ var polygons = ""
 var isLocationWithinOneFloodplainPolygon = false
 var introductionSpeechSaid = false
 var timeIntervalTriggered = false
-var locationState = "noneYet" //// outsideFloodplain, floodplain500yr, floodplain100yr, floodway
+var locationState = "noLocationKnownYet" //// outsideFloodplain, floodplain500yr, floodplain100yr, floodway
 var interval = ""
 var sayLocationInLatLong = false
 
@@ -114,6 +114,8 @@ function stopSpeechUtteranceAndLoop(){
   console.log("used stopSpeechUtteranceAndLoop() function to set timeIntervalTriggered = false and introductionSpeechSaid = false")
   speechSynthesis.cancel()
   console.log("used stopSpeechUtteranceAndLoop() function to call speechSynthesis.cancel()")
+  locationState = "noLocationKnownYet"
+  console.log("used stopSpeechUtteranceAndLoop() function to set locationState = noLocationKnownYet")
 }
 
 function showPosition(position) {
@@ -163,35 +165,59 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
   var numberPolygons = Polygons.features.length
   console.log("number of polygons",numberPolygons)
   console.log('Polygons.features 0',Polygons.features[0])
+  var newLocationState = ""
   for (let i = 0; i < numberPolygons; i++) {
     var searchWithin = turf.polygon(Polygons.features[0].geometry.coordinates);
     var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
     if(ptsWithin.features.length != 0){
-      console.log("location is within this polyon",ptsWithin);
+      newLocationState = "inside"
+      console.log("new location is within this polyon",ptsWithin);
       //// This calls the text to speech capabilities of the browser and says a user is within the floodplain
     }
+    else{
+      newLocationState = "outside"
+      console.log("new location is within this polyon",ptsWithin);
+    }
   }
-  if (isLocationWithinOneFloodplainPolygon == true){
-    let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
-    window.speechSynthesis.speak(withinFloodplainSpeak);
-  }
-  else{
-    let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
-    window.speechSynthesis.speak(notWithinFloodplainSpeak);
-  }
+  checkLocationStateAndUpdate(isLocationWithinOneFloodplainPolygon,newLocationState)
+  // if (isLocationWithinOneFloodplainPolygon == true){
+  //   let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
+  //   window.speechSynthesis.speak(withinFloodplainSpeak);
+  // }
+  // else{
+  //   let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
+  //   window.speechSynthesis.speak(notWithinFloodplainSpeak);
+  // }
   ; 
 }
 
-function checkLocationStateAndUpdate(){
+function checkLocationStateAndUpdate(isLocationWithinOneFloodplainPolygon,newLocationState){
   //// checks if current state and past state are different.
-
-  //// if states are different, do nothing
-
+  if(newLocationState == isLocationWithinOneFloodplainPolygon){
+     //// if states are same, do nothing
+    console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
+  }
   //// if states different
+  else{
+    isLocationWithinOneFloodplainPolygon = newLocationState
+    ///// then say new location state
+    if(newLocationState == "inside"){
+        let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
+        window.speechSynthesis.speak(withinFloodplainSpeak);
+    }
+    else{
+        console.log("newLocationState ",newLocationState )
+        console.log("isLocationWithinOneFloodplainPolygon ",isLocationWithinOneFloodplainPolygon )
+        let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
+        window.speechSynthesis.speak(notWithinFloodplainSpeak);
+    }
+    ///// then update new state in variablew location state
+    
+  }
 
-  ///// then say new location state
+  
 
-  ///// then update new state in variable
+  
   return ""
 }
 
