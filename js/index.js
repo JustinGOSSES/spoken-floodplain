@@ -88,32 +88,33 @@ function getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     console.log("got into getLocation function before checking if introductionSpeechSaid == false")
     withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
     notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
-    if(introductionSpeechSaid == false){
+    while(introductionSpeechSaid == false){
       speechTool = window.speechSynthesis
       console.log("got into getLocation function and introductionSpeechSaid == false")     
       let introSpeak= new SpeechSynthesisUtterance("Location based services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
-      window.speechSynthesis.speak(introSpeak);
-      introductionSpeechSaid = true
-      startCheckingLocationEveryInterval()
+      
+      //startCheckingLocationEveryInterval()
       console.log("startCheckingLocationEveryInterval() on line above")
       console.log("timeIntervalTriggered is set to:",timeIntervalTriggered)
       timeIntervalTriggered = true
       console.log("timeIntervalTriggered is set to:",timeIntervalTriggered)
+      window.speechSynthesis.speak(introSpeak);
+      insideLoopFunction()
+      introductionSpeechSaid = true
     }
-    else{
+    // else{
       console.log("got into getLocation function and introductionSpeechSaid != false.")
-      if(timeIntervalTriggered != false){
+      // if(timeIntervalTriggered != false){
         //navigator.geolocation.getCurrentPosition(showPosition);
-        insideLoopFunction()
-        console.log("IN FUNCTION getLocation, returnedResult",returnedResult)
-        setInterval(function() {
+        //console.log("IN FUNCTION getLocation, returnedResult",returnedResult)
+        interval = setInterval(function() {
           insideLoopFunction();
         }, 10000)
-      }
-      else{
-        console.log("got here? shouldn't get here")
-      }
-    }
+      // }
+      // else{
+      //   console.log("got here? shouldn't get here")
+      // }
+    //}
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
@@ -306,6 +307,7 @@ function checkLocationStateAndUpdate(newLocationState){
 }
 
 function startCheckingLocationEveryInterval(){
-  interval = setInterval(function() {insideLoopFunction();}, 20000)
+  insideLoopFunction()
+  // interval = setInterval(function() {insideLoopFunction();}, 20000)
 }
 
