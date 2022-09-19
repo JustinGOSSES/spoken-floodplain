@@ -126,8 +126,9 @@ function insideLoopFunction(){
   console.log("navigator value in insideLoopFunction",position)
   console.log('test global variable showPositionPoints',showPositionPoints)
 //////////////
-  // console.log("turfPoint",turfPoints)
-  turfPoints = showPositionPoints
+  
+  var turfPoints = showPositionPoints
+  console.log("turfPoint",turfPoints)
   console.log("Polygons",polygons)
   // var dataGlobal = [-95.498,29.7604]
   // var temp_point_in_floodplain = []
@@ -136,16 +137,17 @@ function insideLoopFunction(){
   console.log('Polygons.features 0',polygons.features[0])
   var newLocationState = "unknown"
   for (let i = 0; i < numberPolygons; i++) {
-    var searchWithin = turf.polygon(polygons.features[0].geometry.coordinates);
+    var searchWithin = turf.polygon(polygons.features[i].geometry.coordinates);
     var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
     if(ptsWithin.features.length == 0){
       newLocationState = "outside"
       
-      console.log("new location is within this polyon",ptsWithin);
+      console.log("new location is not within a polyon",ptsWithin);
       //// This calls the text to speech capabilities of the browser and says a user is within the floodplain
     }
     else{
       newLocationState = "inside"
+      console.log("new location is within this polyon",ptsWithin);
       // console.log("new location is within this polyon",ptsWithin);
     }
   }
