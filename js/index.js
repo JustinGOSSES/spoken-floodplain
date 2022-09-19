@@ -135,7 +135,7 @@ function insideLoopFunction(){
   var numberPolygons = polygons.features.length
   console.log("number of polygons",numberPolygons)
   console.log('Polygons.features 0',polygons.features[0])
-  var newLocationState = "unknown"
+  var newLocationState = "outside"
   for (let i = 0; i < numberPolygons-1; i++) {
     try {
       var searchWithin = turf.polygon(polygons.features[i].geometry.coordinates);
@@ -173,8 +173,12 @@ function insideLoopFunction(){
 
        
      }
-     else{
+     else if(newLocationState == "inside"){
       let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is still within the floodplain."); 
+       speechTool.speak(withinFloodplainSpeak);
+     }
+     else{
+      let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is not expected by the program with a value of",newLocationState); 
        speechTool.speak(withinFloodplainSpeak);
      }
    }
