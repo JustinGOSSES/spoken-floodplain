@@ -2,6 +2,16 @@
 <html>
 
 <head>
+
+      <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8E9JEZD1X4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8E9JEZD1X4');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>Spoken Floodplain</title>
@@ -20,6 +30,8 @@
 
     <link rel="stylesheet" href="css/main.css" />
 
+
+  
 </head>
 
 <body>
@@ -28,8 +40,13 @@
         <br>
         <div class="row">
             <div class="col text-center">
-                <button class="btn" onclick="getLocation()"><i class="glyphicon glyphicon-map-marker"></i>Start Location and Speech-based Services</button>
-                <button class="btn" onclick="stopSpeechUtteranceAndLoop()"><i class="glyphicon glyphicon-map-marker"></i>Stop Speech</button>
+                <button class="btn" onclick="getLocation()" style = "background-color: #71e300"><i class="glyphicon glyphicon-map-marker"></i>Start Location and Speech-based Services</button>
+                
+                <br/>
+                <br/>
+                
+                
+                <button class="btn" onclick="stopSpeechUtteranceAndLoop()" style = "background-color: #cc2735"><i class="glyphicon glyphicon-map-marker"></i>Stop Speech</button>
 
                 
             </div>
