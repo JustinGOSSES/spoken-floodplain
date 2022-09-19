@@ -16,6 +16,8 @@ SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/h
 
 https://justingosses.github.io/spoken-floodplain/
 
+Slides following the Houston Hackathon template: https://docs.google.com/presentation/d/1kz7w97LEenhE0t2bj9gjVpCtbpgohDKEAaqHmn88WYE/edit?usp=sharing
+
 ## User Experience
 We could imagine the user is driving around during house shopping.
 
