@@ -11,6 +11,11 @@ var timeIntervalTriggered = false
 var locationState = "noLocationKnownYet" //// outsideFloodplain, floodplain500yr, floodplain100yr, floodway
 var interval = ""
 var sayLocationInLatLong = false
+var withinFloodplainSpeak = "none"
+var notWithinFloodplainSpeak = "none"
+var speechTool = window.speechSynthesis
+var sayEveryMeasurement = true
+var showPositionPoints = ""
 
 // config map
 let config = {
@@ -75,13 +80,16 @@ function addFeatureToMap(data){
 }
 
 
-function getLocation(x) {
+function getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
   if (navigator.geolocation) {
     // $('#trigger').trigger('click')
     //// This calls the function showPosition with an argument of the position of the device.
     //// We'll assume that the geojson polygons is already loaded.
     console.log("got into getLocation function before checking if introductionSpeechSaid == false")
+    withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
+    notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
     if(introductionSpeechSaid == false){
+      speechTool = window.speechSynthesis
       console.log("got into getLocation function and introductionSpeechSaid == false")     
       let introSpeak= new SpeechSynthesisUtterance("Location based services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
       window.speechSynthesis.speak(introSpeak);
@@ -95,7 +103,12 @@ function getLocation(x) {
     else{
       console.log("got into getLocation function and introductionSpeechSaid != false.")
       if(timeIntervalTriggered != false){
-        navigator.geolocation.getCurrentPosition(showPosition);
+        //navigator.geolocation.getCurrentPosition(showPosition);
+        insideLoopFunction()
+        console.log("IN FUNCTION getLocation, returnedResult",returnedResult)
+        setInterval(function() {
+          insideLoopFunction();
+        }, 10000)
       }
       else{
         console.log("got here? shouldn't get here")
@@ -103,6 +116,75 @@ function getLocation(x) {
     }
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function insideLoopFunction(){
+  //var position = navigator.geolocation.watchPosition(showPosition);
+  var position = navigator.geolocation.getCurrentPosition(showPosition);
+  console.log("navigator value in insideLoopFunction",position)
+  console.log('test global variable showPositionPoints',showPositionPoints)
+//////////////
+  // console.log("turfPoint",turfPoints)
+  turfPoints = showPositionPoints
+  console.log("Polygons",polygons)
+  // var dataGlobal = [-95.498,29.7604]
+  // var temp_point_in_floodplain = []
+  var numberPolygons = polygons.features.length
+  console.log("number of polygons",numberPolygons)
+  console.log('Polygons.features 0',polygons.features[0])
+  var newLocationState = "unknown"
+  for (let i = 0; i < numberPolygons; i++) {
+    var searchWithin = turf.polygon(polygons.features[0].geometry.coordinates);
+    var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
+    if(ptsWithin.features.length != 0){
+      newLocationState = "inside"
+      console.log("new location is within this polyon",ptsWithin);
+      //// This calls the text to speech capabilities of the browser and says a user is within the floodplain
+    }
+    else{
+      newLocationState = "outside"
+      // console.log("new location is within this polyon",ptsWithin);
+    }
+  }
+  // checkLocationStateAndUpdate(newLocationState)
+//////////////
+
+  // checks if current state and past state are different.
+  // console.log("comparison",isLocationWithinOneFloodplainPolygon.localeCompare(newLocationState))
+  if(newLocationState == isLocationWithinOneFloodplainPolygon){
+    //// if states are same, do nothing
+   console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
+   console.log("This means no change in location state, which is: ",isLocationWithinOneFloodplainPolygon, "floodplain.g")
+   if(sayEveryMeasurement){
+     if(newLocationState == "inside"){
+       let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
+       speechTool.speak(withinFloodplainSpeak);
+     }
+     else{
+       let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
+       console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+       speechTool.speak(notWithinFloodplainSpeak);
+     }
+   }
+ }
+ //// if states different
+  else{
+    isLocationWithinOneFloodplainPolygon = newLocationState
+    ///// then say new location state
+    if(newLocationState == "inside"){
+        let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
+        speechTool.speak(withinFloodplainSpeak);
+    }
+    else{
+        console.log("newLocationState ",newLocationState )
+        console.log("isLocationWithinOneFloodplainPolygon ",isLocationWithinOneFloodplainPolygon )
+        let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
+        console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+        speechTool.speak(notWithinFloodplainSpeak);
+    }
+    ///// then update new state in variablew location state
+    
   }
 }
 
@@ -133,7 +215,8 @@ function showPosition(position) {
   //// Add marker for location point onto map:
   const marker1 = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
   //// Call function to see if location in polygons
-  searchWithinPolygonsForPoint(polygons,turfPoints)
+  // searchWithinPolygonsForPoint(polygons,turfPoints)
+  showPositionPoints = turfPoints
 }
 
 function showError(error) {
@@ -157,17 +240,17 @@ function showError(error) {
 
 //var turfPoint = turf.point([-95.498,29.7604]);
 
-function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFloodplainPolygon){
+function searchWithinPolygonsForPoint(polygons,turfPoints,isLocationWithinOneFloodplainPolygon){
   console.log("turfPoint",turfPoints)
-  console.log("Polygons",Polygons)
-  var dataGlobal = [-95.498,29.7604]
-  var temp_point_in_floodplain = []
-  var numberPolygons = Polygons.features.length
+  console.log("polygons",polygons)
+  // var dataGlobal = [-95.498,29.7604]
+  // var temp_point_in_floodplain = []
+  var numberPolygons = polygons.features.length
   console.log("number of polygons",numberPolygons)
-  console.log('Polygons.features 0',Polygons.features[0])
+  console.log('Polygons.features 0',polygons.features[0])
   var newLocationState = "unknown"
   for (let i = 0; i < numberPolygons; i++) {
-    var searchWithin = turf.polygon(Polygons.features[0].geometry.coordinates);
+    var searchWithin = turf.polygon(polygons.features[0].geometry.coordinates);
     var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
     if(ptsWithin.features.length != 0){
       newLocationState = "inside"
@@ -180,15 +263,6 @@ function searchWithinPolygonsForPoint(Polygons,turfPoints,isLocationWithinOneFlo
     }
   }
   checkLocationStateAndUpdate(newLocationState)
-  // if (isLocationWithinOneFloodplainPolygon == true){
-  //   let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
-  //   window.speechSynthesis.speak(withinFloodplainSpeak);
-  // }
-  // else{
-  //   let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
-  //   window.speechSynthesis.speak(notWithinFloodplainSpeak);
-  // }
-  //; 
 }
 
 function checkLocationStateAndUpdate(newLocationState){
@@ -197,7 +271,18 @@ function checkLocationStateAndUpdate(newLocationState){
   if(newLocationState == isLocationWithinOneFloodplainPolygon){
      //// if states are same, do nothing
     console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
-    console.log("This measn no change in location state, which is: ",isLocationWithinOneFloodplainPolygon, "floodplain.")
+    console.log("This means no change in location state, which is: ",isLocationWithinOneFloodplainPolygon, "floodplain.g")
+    if(sayEveryMeasurement){
+      if(newLocationState == "inside"){
+        let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
+        speechTool.speak(withinFloodplainSpeak);
+      }
+      else{
+        let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
+        console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+        speechTool.speak(notWithinFloodplainSpeak);
+      }
+    }
   }
   //// if states different
   else{
@@ -205,13 +290,14 @@ function checkLocationStateAndUpdate(newLocationState){
     ///// then say new location state
     if(newLocationState == "inside"){
         let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
-        window.speechSynthesis.speak(withinFloodplainSpeak);
+        speechTool.speak(withinFloodplainSpeak);
     }
     else{
         console.log("newLocationState ",newLocationState )
         console.log("isLocationWithinOneFloodplainPolygon ",isLocationWithinOneFloodplainPolygon )
         let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
-        window.speechSynthesis.speak(notWithinFloodplainSpeak);
+        console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+        speechTool.speak(notWithinFloodplainSpeak);
     }
     ///// then update new state in variablew location state
     
@@ -220,6 +306,6 @@ function checkLocationStateAndUpdate(newLocationState){
 }
 
 function startCheckingLocationEveryInterval(){
-  interval = setInterval(function() {getLocation();}, 5000)
+  interval = setInterval(function() {insideLoopFunction();}, 20000)
 }
 
