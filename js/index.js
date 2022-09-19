@@ -136,19 +136,24 @@ function insideLoopFunction(){
   console.log("number of polygons",numberPolygons)
   console.log('Polygons.features 0',polygons.features[0])
   var newLocationState = "unknown"
-  for (let i = 0; i < numberPolygons; i++) {
-    var searchWithin = turf.polygon(polygons.features[i].geometry.coordinates);
-    var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
-    if(ptsWithin.features.length == 0){
-      newLocationState = "outside"
-      
-      console.log("new location is not within a polyon",ptsWithin);
-      //// This calls the text to speech capabilities of the browser and says a user is within the floodplain
+  for (let i = 0; i < numberPolygons-1; i++) {
+    try {
+      var searchWithin = turf.polygon(polygons.features[i].geometry.coordinates);
+      var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
+      console.log("ptsWithin",ptsWithin)
+      console.log("ptsWithin.features.length",ptsWithin.features.length)
+      if(ptsWithin.features.length != 0){
+        newLocationState = "inside"
+        console.log("new location is within this polyon",ptsWithin);
+        //// This calls the text to speech capabilities of the browser and says a user is within the floodplain
+      }
+      else{
+        //newLocationState = "outside"
+        // console.log("new location is within this polyon",ptsWithin);
+      }
     }
-    else{
-      newLocationState = "inside"
-      console.log("new location is within this polyon",ptsWithin);
-      // console.log("new location is within this polyon",ptsWithin);
+    catch(err){
+      console.log("error in searchWithiPolygonsForPoint function =",err)
     }
   }
   // checkLocationStateAndUpdate(newLocationState)
