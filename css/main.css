@@ -3,6 +3,16 @@
     
 #header, #location, #btn { text-align: center; }
 
+#locationHeader {text-align:center;}
+
+
+.selected 
+{
+    border:0.2em solid rgb(58, 58, 58); /* here configure as your needs */
+    /* color:#00c; */
+ }
+
+
 
 
 

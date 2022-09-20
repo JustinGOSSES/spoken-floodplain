@@ -40,8 +40,61 @@ let config = {
   
   function onEachFeature(feature, layer) {
     layer.bindPopup(feature.properties.ZONE_SUBTY);
+    if("FLOODWAY" == feature.properties.ZONE_SUBTY){
+      layer.setStyle({
+        weight: 3,
+        opacity: 1,
+        color: 'blue',
+        fillOpacity: 0.22,
+        fillColor: 'blue'
+      })
+    }
+    else if(feature.properties.ZONE_SUBTY == "0.2 PCT ANNUAL CHANCE FLOOD HAZARD"){
+      layer.setStyle({
+        weight: 1,
+        opacity: 1,
+        color: 'blue',
+        fillOpacity: 0.1,
+        fillColor: 'blue'
+      })
+    }
+    else{
+      layer.setStyle({
+        weight: 1,
+        opacity: 1,
+        color: 'blue',
+        fillOpacity: 0.15,
+        fillColor: 'blue'
+      })
+    }
   }
   
+  function style() {
+    return {
+      weight: 1,
+              opacity: 1,
+              color: 'pink',
+              fillOpacity: 0.2,
+              fillColor: 'pink'
+    }
+    // if ("FLOODWAY" == feature.properties.ZONE_SUBTY) {
+    //     return {
+    //         weight: 5,
+    //         opacity: 1,
+    //         color: 'blue',
+    //         fillOpacity: 0.5,
+    //         fillColor: 'blue'
+    //     };
+    // } else {
+    //     return {
+    //         weight: 1,
+    //         opacity: 1,
+    //         color: 'pink',
+    //         fillOpacity: 0.2,
+    //         fillColor: 'pink'
+    //     };
+    // }
+}
   // adding geojson by fetch
   // of course you can use jquery, axios etc.
   //fetch("./data/created_data/FEMA_FIRM_FloodPolygons_forDisplay_fromNFHL_exported2022_09.geojson", {
@@ -75,6 +128,10 @@ let config = {
 function addFeatureToMap(data){
   console.log('data', data); 
       L.geoJSON(data, {
+        style:{
+          color: '#purple',
+        }
+    }, {
         onEachFeature: onEachFeature,
       }).addTo(map);
 }
@@ -88,10 +145,15 @@ function getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     console.log("got into getLocation function before checking if introductionSpeechSaid == false")
     // withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
     // notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
+    //// Change button focus state
+    var element = document.getElementById("start");
+    element.classList.add("selected");
+    var elmentOther =  document.getElementById('stop');
+    elmentOther.classList.remove('selected');
     while(introductionSpeechSaid == false){
       speechTool = window.speechSynthesis
       console.log("got into getLocation function and introductionSpeechSaid == false")     
-      let introSpeak= new SpeechSynthesisUtterance("Location based services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
+      let introSpeak= new SpeechSynthesisUtterance("Location services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
       
       //startCheckingLocationEveryInterval()
       console.log("startCheckingLocationEveryInterval() on line above")
@@ -204,16 +266,23 @@ function insideLoopFunction(){
   isLocationWithinOneFloodplainPolygon = newLocationState
 }
 
-function stopSpeechUtteranceAndLoop(){
+function stopSpeechUtteranceAndLoop(reStateActivation=true){
   clearInterval(interval)
   console.log("used stopSpeechUtteranceAndLoop() function to cleare interval")
   timeIntervalTriggered = false
-  introductionSpeechSaid = false
+  if(reStateActivation){
+    introductionSpeechSaid = false
+  }
   console.log("used stopSpeechUtteranceAndLoop() function to set timeIntervalTriggered = false and introductionSpeechSaid = false")
   speechSynthesis.cancel()
   console.log("used stopSpeechUtteranceAndLoop() function to call speechSynthesis.cancel()")
   locationState = "noLocationKnownYet"
   console.log("used stopSpeechUtteranceAndLoop() function to set locationState = noLocationKnownYet")
+  //// Change button focus state
+  var element = document.getElementById("stop");
+  element.classList.add("selected");
+  var elmentOther =  document.getElementById('start');
+  elmentOther.classList.remove('selected');
 }
 
 function showPosition(position) {
@@ -233,6 +302,45 @@ function showPosition(position) {
   //// Call function to see if location in polygons
   // searchWithinPolygonsForPoint(polygons,turfPoints)
   showPositionPoints = turfPoints
+}
+
+function changeSpeakingRate(howOften){ //// 'constantly' or 'boundaries' are expected values
+  //// Call function to stop code
+  stopSpeechUtteranceAndLoop(reStateActivation=false)
+  //// Change sayEveryMeasurement from true to false if howOften variable is 'boundaries' and inverse other way
+  try {
+    console.log("sayEveryMeasurement = ",sayEveryMeasurement)
+    if (sayEveryMeasurement == true && howOften == 'boundaries' ){
+      sayEveryMeasurement = false
+      let speakingRateConstantFalse = new SpeechSynthesisUtterance("Now giving information only at floodplain boundaries."); 
+       speechTool.speak(speakingRateConstantFalse);
+       //// Change button focus state
+      var element = document.getElementById("boundaries");
+      element.classList.add("selected");
+      var elmentOther =  document.getElementById('constantly');
+      elmentOther.classList.remove('selected');
+    }
+    else if (sayEveryMeasurement == false  && howOften == 'constantly' ){
+      sayEveryMeasurement = true
+      let speakingRateConstant = new SpeechSynthesisUtterance("Now giving information every several seconds."); 
+       speechTool.speak(speakingRateConstant);
+          //// Change button focus state
+      var element = document.getElementById("constantly");
+      element.classList.add("selected");
+      var elmentOther =  document.getElementById('boundaries');
+      elmentOther.classList.remove('selected');
+    }
+    else{
+      let speakingRateNoChange = new SpeechSynthesisUtterance("That speaking rate already selected. No change."); 
+       speechTool.speak(speakingRateNoChange);
+    }
+
+    console.log("sayEveryMeasurement after change = ",sayEveryMeasurement)
+  } catch (e) {
+      console.error(e, e.stack);
+  }
+  //// restart loop
+  getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak)
 }
 
 function showError(error) {
