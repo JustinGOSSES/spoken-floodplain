@@ -48,24 +48,7 @@ _The goal of this experiment is to see if location + text-to-speech services alr
 
 This prototype will be built with geojson data specific to the Houston area bundeled with the code of the page. The approach could be extended to other locations. However, if you want to cover very large areas, you'd likely want to build the page such that the data is not bundeled but only downloaded in small pieces a close distance around the location of the user. Otherwise, the download time of the data will make the page load too slow. 
 
-## First Pass Guess at Hackathon Roles/Tasks
-#### Involves Writing Code
-- [code: python, javascript, other] Potentially merge (or split?) separate geojson files to improve load performance. May require using browser inspector to figure out what is slowing load speeds.
-- [write javascript] Write javascript to calls turf.js to figure out if the coordinates of the user are in any of the polygons.
-- [write javascript]Write javascript to turn text into speech.
-### Does not Involve Writing Code
-- [non-code] Creates slides for presentations following [template](https://docs.google.com/presentation/d/10SQOx-6oWlolidW6kMj2MmJEOGUMokADWDysCIh-dNs/edit#slide=id.gab2a44e39f_0_17): 
-#### User Work
-- [non-code] Writes up user personas
-- [non-code] Figure out what the application should say. 
-- [non-code] Figure out how often the application should say something 
-- [non-code] Check prototype behavior under different permission & security default settings. Figure out how to tell users what to change if necessary. 
-- [write javascript]Write code to load geojson files. 
-- [non-code] Check performance of prototypes on multiple phone operating systems and browser makes if possible. 
-
-- etc. 
-
-## Data
+## Getting the Floodplain Data in Geojson Format
 Tried a few places to find good floodplain & floodway geojson files specific to boundary of City of Houston or Harris County. 
 
 Might do a write up eventually of things that don't work or bugs along the way in some of the datasets people stumble upon via a web search. For now, this top option below seems workable.
@@ -77,36 +60,32 @@ Might do a write up eventually of things that don't work or bugs along the way i
 Further description of how to download and then how to process the GIS datasets in shapefile and other formats into a single GEOJSON that can be 
 worked with on the web is found in a Jupyter Notebook in the notebooks folder called `FEMA FIRM COUNTY LEVEL DATA HARRIS Shapefile to GEOJSON.ipynb`.
 
-## Tools to be Used
-
-#### Potential Technology
-Reuses free & open data. No server necessary, all front-end. All technology capabilities necessary already exists. 
+## PLANNING
+### Technology Used
+Reuses free & open data. No server necessary, all front-end. All technology capabilities necessary already exists, just not combined in this way, which made it well suited for a short hackathon.
 
 - [browser capabilities to call]
-  - API for text-to-speech
-  - API for location sharing
+  - <a href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis">Browser API for text-to-speech or speech synthesis</a>
+  - <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API">Browser API for location sharing</a>
 - [data] 
-  - Geojson of floodplains in Houston area
+  - Geojson of floodplains in Houston area, described in section above.
 - [JavaScript] 
-  - code to check if location inside of geojson's
+  - code to call browser APIs for location and speech synthesis.
+  - code to check if location inside of geojson's polygons (turf.js)
   - code to parse geojson properties and location relative information into text message
   - code to control timing
-  - code for front-end user interface and optional map
+  - code for front-end user interface and optional map (leaflet.js)
 
-
-### Browser Web APIs
+#### Browser Web APIs
 Modern browsers enable location sharing through the Location Browser API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Location
 
 #### Browswer Web API for Text-to-Speech
 Modern browsers enable basic text-to-speech capabilities through a browswer API as described here: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
 
-#### Browswer Web API for Location
-TODO
-
-### Turf.js
+#### Turf.js
 Turf.js will be used to determine if the coordinates of the user's location is within a floodplain polygon and return whether it is 500 year plain, 100 year floodplain, or floodway.
 
-### Leaflet.js
+#### Leaflet.js
 Leaflet.js will be used to display the user's location on a map with an overlay of the floodplains and floodway.
 
 ## Considerations
@@ -116,26 +95,19 @@ Leaflet.js will be used to display the user's location on a map with an overlay 
   - description: Observable notebook that asks for location & speech permissions that tells you a bit about the top layer of the geology you're standing on. This code could be used as a starting point for this project.
 
 #### Permissions On Start Issues
-Location sharing and text-to-speech require the user to actively approve each time the page is loaded. Some people may set defaults to stop the page from even asking for permission. Others may have set their browser to only ask once. The typical default behavior is to ask on each page load. This variation in potential user behavior and browser configurations needs to be included in design.
+Location sharing and text-to-speech require the user to actively approve each time the page is loaded. Some people may set defaults to stop the page from even asking for permission. Others may have set their browser to only ask once. The typical default behavior is to ask on each page load. 
 
-#### Potential Technology Issues that Could Require More Time than Hackathon
-- [Confirmed not an issue] Size of Geojson files
+This variation in potential user behavior and browser configurations needs to be included in design. Learnings of what settings need to be changed and best way to give instructions to users will likely be built up over time based on learnings.
+
+#### Potential Technology Issues that Could Require More Time than Hackathon so Where Derisked Before Hackathon
+- [Confirmed not an unsolvable issue] Size of Geojson files
   - Was worried that the total size of the geojson files would make page load so slow as to be unworkable. Loaded a few of them into an Observable notebook. There was a wait but nothing unworkable. There's likely ways to improve page load time further, so a surmountable issue.
 - [Confirmed not an issue] Whether location sharing permission granting works only once or the entire time a page is loaded. 
   - Messed around in an Obserbable notebook. Once you give permission, looks like the web api for location can be set up to continuously gives location and speed and bearing are optional requests.
 
 #### Privacy Concerns to be Addressed in User Interface
-Sometimes people will have location sharing turned off in their browswer as they don't want to share location data. The page will need to tell people that 
-(1) this page won't actually share any of your location data, just use it locally on the page (2) let them know that they may see browser messages about sharing data as the browser is not able to tell the difference between (a) location data that is just used on the page on their device and (b) location data that is sent back to some server.
-
+Sometimes people will have location sharing turned off in their browswer as they don't want to share location data. The page will need to tell people what tracking is and is not active on the page.
 
 #### Accuracy & Legal Concerns
-Due to the potential decisions made with this data, there will need to be a click through screen with a disclaimer like on other products with similar data.
+Due to the potential decisions made with this data, there will need to be a disclaimer message like on other products with similar data stating that they should only use authoritative and recent data from FEMA before making any engineering or legal decisions.
 
-
-### Potential Configuration Variables
-
-- How often location is checked
-- What information is provided to user as speech. 
-  - Is this configurable in terms of more or less information. 
-  - Can this be configured to vary based on how close to floodplain?
