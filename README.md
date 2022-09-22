@@ -1,16 +1,16 @@
 # Spoken-floodplain
 
-Placeholder for a potential houston hackathon project that is...
-
 <b>A website that _verbally_ tells users when they enter or leave a floodplain as they are ON THE MOVE.</b>
 
-WHY BUILD THIS? => The idea is this would be a supplemental approach to the traditional floodplain maps that are typically experienced through websites that assume users are:
+WHY BUILD THIS? => The idea is this would be a supplemental approach to the traditional floodplain maps.
+
+Most of the other floodplain maps online that I've tried that tend to assume users are:
 - (1) sitting at a computer and 
-- (2) looking at either looking at a whole city or a singular address. 
+- (2) looking at either a whole city or a singular address. 
 
 _This is an experiment in taking floodplain information and providing it in a different way that changes how people experience it. There is a hypothesis here that if floodplain information is experienced while actually in a place, it changes how people process it compared to the same information represented later in an abstract map form._
 
-SIGN UP FOR THE HACKATHON ON SEPT 16th 2022 HERE: https://www.eventbrite.com/e/houston-hackathon-2022-registration-403212378077
+Although this implimentation is specific to floodplains in Harris County (Houston) Texas, the basic idea might be extended to any geojson file or files.
 
 ## live site 
 
