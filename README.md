@@ -109,6 +109,10 @@ Turf.js will be used to determine if the coordinates of the user's location is w
 ### Leaflet.js
 Leaflet.js will be used to display the user's location on a map with an overlay of the floodplains and floodway.
 
+### NoSleep.js
+Using NoSleep.js to trick the browser to stay awake even if it is not being touched. Otherwise the screen will go to sleep and not speak 
+anymore after a few minutes.
+
 ## Considerations
 #### Prior Art
 - Stratigraphy-Speech:

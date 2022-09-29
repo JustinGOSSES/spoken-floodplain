@@ -180,6 +180,15 @@ function getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
   } else {
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
+  var noSleep = "notActivated"
+  try {
+    noSleep = new NoSleep();
+    noSleep.enable(); // keep the screen on!
+    //wakeLockEnabled = true;
+  }
+  catch (error){
+    console.log("error with nosleep.js, error=",error)
+  }
 }
 
 function insideLoopFunction(){
