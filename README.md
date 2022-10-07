@@ -115,3 +115,9 @@ Sometimes people will have location sharing turned off in their browswer as they
 #### Accuracy & Legal Concerns
 Due to the potential decisions made with this data, there will need to be a disclaimer message like on other products with similar data stating that they should only use authoritative and recent data from FEMA before making any engineering or legal decisions.
 
+## Contributors 
+- Justin Gosses: Ideation and JavaScript.
+- Lester Lee: Product direction, writing, and communications.
+- Manish Paudel: JavaScript and analytics.
+- Rawaa Alsafar: User testing on Android.
+- William Falconer: Reduced size of floodplain geojson without loosing any fidelity in the outlines and solved two critical bugs.
