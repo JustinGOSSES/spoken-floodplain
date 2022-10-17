@@ -165,6 +165,7 @@ function getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     // else{
       console.log("got into getLocation function and introductionSpeechSaid != false.")
       // if(timeIntervalTriggered != false){
+        //navigator.geolocation.getCurrentPosition(showPosition);
         //console.log("IN FUNCTION getLocation, returnedResult",returnedResult)
         interval = setInterval(function() {
           insideLoopFunction();
