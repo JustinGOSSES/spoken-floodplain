@@ -41,20 +41,20 @@
         <br>
         <div class="row">
             <div class="col text-center">
-                <button id="start" class="btn" onclick="getLocation()" style = "background-color: #bbe196"><i class="glyphicon glyphicon-map-marker"></i>Start Location and Speech-based Services</button>
+                <button id="start" class="btn" onclick="spokenGeoJSON_Harris_global.getLocation()" style = "background-color: #bbe196"><i class="glyphicon glyphicon-map-marker"></i>Start Location and Speech-based Services</button>
                 
                 <br/>
                 <br/>
                 
                 
-                <button id="stop" class="btn selected" onclick="stopSpeechUtteranceAndLoop()" style = "background-color: #f64453"><i class="glyphicon glyphicon-map-marker"></i>Stop Speech</button>
+                <button id="stop" class="btn selected" onclick="spokenGeoJSON_Harris_global.stopSpeechUtteranceAndLoop()" style = "background-color: #f64453"><i class="glyphicon glyphicon-map-marker"></i>Stop Speech</button>
 
                 
             </div>
         </div>
         <br><br>
         <!-- <p id="locationHeader">Status:</p> -->
-        <div id="location">Location Services Not Yet Running</div>
+        <div id="location"></div>
         <br>
         <div id="map"></div>
     </div>
@@ -62,13 +62,13 @@
         <div class="row">
             <br/>
             <div class="col text-center">
-                <button id="constantly" class="btn selected" onclick="changeSpeakingRate('constantly')" style = "background-color: #bab1cd"><i class="glyphicon glyphicon-map-marker"></i>Speak every few seconds</button>
+                <button id="constantly" class="btn selected" onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('constantly')" style = "background-color: #bab1cd"><i class="glyphicon glyphicon-map-marker"></i>Speak every few seconds</button>
 
                
                 <br/>
                 <br/>
                 
-                <button id="boundaries" class="btn" onclick="changeSpeakingRate('boundaries')" style = "background-color: #f8ef89"><i class="glyphicon glyphicon-map-marker"></i>Speak Only When Entering or Leaving Floodplain</button>
+                <button id="boundaries" class="btn" onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('boundaries')" style = "background-color: #f8ef89"><i class="glyphicon glyphicon-map-marker"></i>Speak Only When Entering or Leaving Floodplain</button>
                 
                
                 
