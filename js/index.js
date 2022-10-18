@@ -1,8 +1,22 @@
 /////////////////////////////////
 
+//// Instead of polluting the namespace all variables and methods are in a single class object instance now.
 spokenGeoJSON_Harris_global = ""
 
 //class spokenGeoJson(divIdForMapString){
+/**
+* This class holds all properties and functions necessary to create a spokenGeoJSON instance. 
+* - It calls leaflet.js, noSleep.js, the SpeecSynthysis browswer API, and the getLocation browser APIs.
+* - This function can be iniated during a window.addEventListener function that starts on page load.
+* - Data for the map is added after class object instance initiation.
+* - Several functions are designed to be called via HTML buttons that control behavior.
+* - - getLocation() can be kicked off by a "start" button and it starts location finding and placing markers on the map as well as the loop that runs constantly.
+* - - stopSpeechUtteranceAndLoop() stops the speaking part but the location finding and map edits continue.
+* - - changeSpeakingRate() changes how often and when speaking occurs.
+* - sIt returns nothing. 
+* @param {string} divIdForMapString, This argument is the string value of the divID in the HTML where the leaflet.js map will be placed.
+* @returns {undefined} , nothing is returned
+*/
 class spokenGeoJSON {
   constructor(divIdForMapString) {
     ////////////////  PROPERTIES //////////////////////////
@@ -23,15 +37,14 @@ class spokenGeoJSON {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
     /* PROPERTIES: map state */
-    
     this.locationState = "noLocationKnownYet"; //// outsideFloodplain, floodplain500yr, floodplain100yr, floodway
     this.isLocationWithinOneFloodplainPolygon = false;
     /* PROPERTIES: speaking */
     this.introductionSpeechSaid = false;
     this.sayLocationInLatLong = false;
     this.speechTool = window.speechSynthesis;
-    this.withinFloodplainSpeak = "none";
-    this.notWithinFloodplainSpeak = "none";
+    this.withinFloodplainSpeak = "none"; //// This is a placeholder for a speechSynthesis object
+    this.notWithinFloodplainSpeak = "none"; //// This is a placeholder for a speechSynthesis object
     this.sayEveryMeasurement = true;
     /* PROPERTIES: timing */
     this.timeIntervalTriggered = false;
@@ -40,38 +53,7 @@ class spokenGeoJSON {
   }
     // //////////////// METHODS //////////////////////////
     //  /* METHODS: data load functions*/
-    // /**
-    //  * This function fetches the geojson that holds all the data applied to the map. It must be called before other map-related functions
-    //  * @returns {undefined} , nothing is returned
-    //  */
-    // fetches(){
-    //   fetch("./data/FEMA_FIRM_FloodPolygons.json", {
-        
-    //     headers : { 
-    //       // 'Content-Type': 'application/json',
-    //       // 'Accept': 'application/json'
-    //     }
-
-    //   })
-    //     .then(function (response) {
-    //       console.log('response message:', response); 
-    //       var data = response.json()
-    //       //console.log('data early, json :', data);
-    //       // await addFeatureToMap(data) 
-    //       // setTimeout(function(data) {
-    //       //   return addFeatureToMap(data) ;
-    //       // }, 10000);
-    //       return data;
-    //     })
-    //     .then(function (data) {
-    //       // use geoJSON
-    //       polygons = data
-    //       console.log('data', data); 
-    //       L.geoJSON(data, {
-    //         onEachFeature: this.onEachFeature,
-    //       }).addTo(this.map);
-    //     });
-    // }
+    //  /* moved this out as could be different ways to bring in data and best to not be specific */
     /* METHODS: map functions*/
     /**
      * This function sets the style on each feature in a given layer that is already applied to the leaflet map.
@@ -109,6 +91,11 @@ class spokenGeoJSON {
           })
         }
       }
+  /**
+   * This function sets markers for the current position on the leaflet map.
+   * @param {object} position, the lat / long current position that is to be added to the map
+   * @returns {undefined} , nothing is returned
+   */
   showPosition(position) {
         //// This resets the center of the map based on the location position from the device.
         this.map.setView([position.coords.latitude, position.coords.longitude], 15)
@@ -128,6 +115,12 @@ class spokenGeoJSON {
         this.showPositionPoints = turfPoints
       }
   /* METHODS: from buttons*/
+  /**
+   * This function kicks off a bunch of things including asking for location, starting speech, setting up noSleep, and the loops.
+   * @param {object} withinFloodplainSpeak, a speech utterance ready to go for when the maker is within the floodplain.
+   * @param {object} notWithinFloodplainSpeak, a speech utterance ready to go for when the maker is NOT within the floodplain.
+   * @returns {undefined} , nothing is returned
+   */
   getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     if (navigator.geolocation) {
       // $('#trigger').trigger('click')
@@ -351,7 +344,10 @@ class spokenGeoJSON {
 
 /**
  * This function starts calling the initial JavaScript functions after the HTML is loaded. 
- * Specifically it calls the fetches function
+ * Specifically it calls the fetches function to get the geojson data loaded 
+ * and creates an instance of the spokenGeoJSON class and then adds the data to it as 'polygons' property before
+ * calling the onEachFeature method of the spokenGeoJSON class that applies that data to the leaflet map intiated
+ * when the class instance was first initiated.
  * @returns {undefined} , nothing is returned
  */
 window.addEventListener('load', (event) => {

@@ -115,3 +115,5 @@ Sometimes people will have location sharing turned off in their browswer as they
 #### Accuracy & Legal Concerns
 Due to the potential decisions made with this data, there will need to be a disclaimer message like on other products with similar data stating that they should only use authoritative and recent data from FEMA before making any engineering or legal decisions.
 
+# Documentation
+Some functions are starting to be documented in the docs/index.html file
