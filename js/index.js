@@ -123,12 +123,8 @@ class spokenGeoJSON {
    */
   getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     if (navigator.geolocation) {
-      // $('#trigger').trigger('click')
-      //// This calls the function showPosition with an argument of the position of the device.
       //// We'll assume that the geojson polygons is already loaded.
       console.log("got into getLocation function before checking if introductionSpeechSaid == false")
-      // withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is within the floodplain."); 
-      // notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is outside the floodplain."); 
       //// Change button focus state
       var element = document.getElementById("start");
       element.classList.add("selected");
@@ -138,30 +134,20 @@ class spokenGeoJSON {
         this.speechTool = window.speechSynthesis
         console.log("got into getLocation function and introductionSpeechSaid == false")     
         let introSpeak= new SpeechSynthesisUtterance("Location services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
-        
-        //startCheckingLocationEveryInterval()
-        console.log("startCheckingLocationEveryInterval() on line above")
-        console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered)
+        // console.log("startCheckingLocationEveryInterval() on line above")
+        // console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered)
         this.timeIntervalTriggered = true
         console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered)
         window.speechSynthesis.speak(introSpeak);
         this.insideLoopFunction()
         this.introductionSpeechSaid = true
       }
-      // else{
         console.log("got into getLocation function and introductionSpeechSaid != false.")
-        // if(timeIntervalTriggered != false){
-          //console.log("IN FUNCTION getLocation, returnedResult",returnedResult)
-          this.interval = function(){
+        this.interval = function(){
             return setInterval(function() {
               this.insideLoopFunction();
             }, 10000)
           }
-        // }
-        // else{
-        //   console.log("got here? shouldn't get here")
-        // }
-      //}
     } else {
       x.innerHTML = "Geolocation is not supported by this browser.";
     }
@@ -184,12 +170,9 @@ class spokenGeoJSON {
    */
   insideLoopFunction(){
     //var position = navigator.geolocation.watchPosition(showPosition);
-    //var position = navigator.geolocation.getCurrentPosition(this.showPosition);
     var position = navigator.geolocation.getCurrentPosition(this.showPosition);
     console.log("navigator value in insideLoopFunction",this.position)
     console.log('test global variable showPositionPoints',this.showPositionPoints)
-  //////////////
-    
     var turfPoints = this.showPositionPoints
     console.log("turfPoint",turfPoints)
     // console.log("Polygons",this.polygons)
@@ -201,8 +184,6 @@ class spokenGeoJSON {
       try {
         var searchWithin = turf.polygon(polygons.features[i].geometry.coordinates);
         var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
-        // console.log("ptsWithin",ptsWithin)
-        // console.log("ptsWithin.features.length",ptsWithin.features.length)
         if(ptsWithin.features.length != 0){
           this.newLocationState = "inside"
           console.log("new location is within this polyon",ptsWithin);
@@ -217,11 +198,6 @@ class spokenGeoJSON {
         console.log("error in searchWithiPolygonsForPoint function =",err)
       }
     }
-    // checkLocationStateAndUpdate(newLocationState)
-  //////////////
-  
-    // checks if current state and past state are different.
-    // console.log("comparison",isLocationWithinOneFloodplainPolygon.localeCompare(newLocationState))
     if(newLocationState == this.isLocationWithinOneFloodplainPolygon){
       //// if states are same, do nothing
      console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
