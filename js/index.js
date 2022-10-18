@@ -176,10 +176,12 @@ class spokenGeoJSON {
     }
   }
 
-  
-  /* METHODS: initiation*/
-
   /* METHODS: location looping */
+  /**
+   * TODO --- This function is the inside loop that runs until something changes
+   * TODO Explain it more!
+   * @returns {undefined} , nothing is returned
+   */
   insideLoopFunction(){
     //var position = navigator.geolocation.watchPosition(showPosition);
     //var position = navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -263,6 +265,13 @@ class spokenGeoJSON {
   }
 
   /* METHODS: speaking changes */
+   /**
+   * TODO --- This function stops the speech utterance calls and sets this.locationState to "noLocationKnownYet"
+   * It also changes the button styles so it is obvious they were pushed.
+   * TODO Explain it more!
+   * @param {boolean} reStateActivation, Default value is true. 
+   * @returns {undefined} , nothing is returned
+   */
   stopSpeechUtteranceAndLoop(reStateActivation=true){
     clearInterval(this.interval)
     console.log("used stopSpeechUtteranceAndLoop() function to cleare interval")
@@ -281,6 +290,13 @@ class spokenGeoJSON {
     var elmentOther =  document.getElementById('start');
     elmentOther.classList.remove('selected');
   }
+  /**
+   * TODO --- This function changes the rate and circumstances of speech utterance calls
+   * TODO
+   * TODO Explain it more!
+   * @param {string} howOfte, A string value of preferred state. Options are ....... TODO.....
+   * @returns {undefined} , nothing is returned
+   */
   changeSpeakingRate(howOften){ //// 'constantly' or 'boundaries' are expected values
     //// Call function to stop code
     this.stopSpeechUtteranceAndLoop(this.reStateActivation=false)
@@ -321,6 +337,11 @@ class spokenGeoJSON {
   }
   
   /* METHODS: change configurations */
+     /**
+   * TODO --- This function shows more useful errors when they occur in a certain place in the class
+   * @param {object} error, the error
+   * @returns {undefined} , nothing is returned
+   */
   showError(error) {
     switch(error.code) {
       case error.PERMISSION_DENIED:
