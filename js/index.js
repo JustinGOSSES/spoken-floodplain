@@ -159,9 +159,11 @@ class spokenGeoJSON {
         console.log("got into getLocation function and introductionSpeechSaid != false.")
         // if(timeIntervalTriggered != false){
           //console.log("IN FUNCTION getLocation, returnedResult",returnedResult)
-          this.interval = setInterval(function() {
-            this.insideLoopFunction();
-          }, 10000)
+          this.interval = function(){
+            return setInterval(function() {
+              this.insideLoopFunction();
+            }, 10000)
+          }
         // }
         // else{
         //   console.log("got here? shouldn't get here")
@@ -228,7 +230,7 @@ class spokenGeoJSON {
     if(newLocationState == this.isLocationWithinOneFloodplainPolygon){
       //// if states are same, do nothing
      console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
-     console.log("This means no change in location state, which is: ",isLocationWithinOneFloodplainPolygon, "floodplain")
+     console.log("This means no change in location state, which is: ",this.isLocationWithinOneFloodplainPolygon, "floodplain")
      if(this.sayEveryMeasurement){
        if(newLocationState == "outside"){
         let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is still outside the floodplain."); 
@@ -269,7 +271,7 @@ class spokenGeoJSON {
 
   /* METHODS: speaking changes */
   stopSpeechUtteranceAndLoop(reStateActivation=true){
-    this.clearInterval(this.interval)
+    clearInterval(this.interval)
     console.log("used stopSpeechUtteranceAndLoop() function to cleare interval")
     this.timeIntervalTriggered = false
     if(reStateActivation){
@@ -278,7 +280,7 @@ class spokenGeoJSON {
     console.log("used stopSpeechUtteranceAndLoop() function to set timeIntervalTriggered = false and introductionSpeechSaid = false")
     speechSynthesis.cancel()
     console.log("used stopSpeechUtteranceAndLoop() function to call speechSynthesis.cancel()")
-    locationState = "noLocationKnownYet"
+    this.locationState = "noLocationKnownYet"
     console.log("used stopSpeechUtteranceAndLoop() function to set locationState = noLocationKnownYet")
     //// Change button focus state
     var element = document.getElementById("stop");
@@ -317,12 +319,12 @@ class spokenGeoJSON {
          this.speechTool.speak(speakingRateNoChange);
       }
   
-      console.log("sayEveryMeasurement after change = ",sayEveryMeasurement)
+      // console.log("sayEveryMeasurement after change = ",this.sayEveryMeasurement)
     } catch (e) {
         console.error(e, e.stack);
     }
     //// restart loop
-    getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak)
+    this.getLocation(this.withinFloodplainSpeak,this.notWithinFloodplainSpeak)
   }
   
   /* METHODS: change configurations */
