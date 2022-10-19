@@ -23,7 +23,7 @@ class spokenGeoJSON {
     /* PROPERTIES: leaflet map */
     this.polygons = "";
     this.dataGlobal = [-95.498,29.7604]; //// This is the center of the map when first created in order of [long, lat]
-    this.showPositionPoints = ""; //// These become turf points
+    this.currentPositionPoints = ""; //// These become turf points
     this.config = {minZoom: 2,maxZoom: 18,};  // magnification with which the map will start
     this.zoom = 10;
     this.lat = this.dataGlobal[1];
@@ -47,9 +47,11 @@ class spokenGeoJSON {
     this.notWithinFloodplainSpeak = "none"; //// This is a placeholder for a speechSynthesis object
     this.sayEveryMeasurement = true;
     /* PROPERTIES: timing */
-    this.timeIntervalTriggered = false;
+    this.timeIntervalTriggered = false;  //// Tracks a state of whether introductury text has been said yet.
     this.interval = "";
     this.showPosition = this.showPosition.bind(this)
+    this.adjustPosition = this.adjustPosition.bind(this)
+    this.counter = 0
   }
     // //////////////// METHODS //////////////////////////
     //  /* METHODS: data load functions*/
@@ -96,24 +98,84 @@ class spokenGeoJSON {
    * @param {object} position, the lat / long current position that is to be added to the map
    * @returns {undefined} , nothing is returned
    */
-  showPosition(position) {
-        //// This resets the center of the map based on the location position from the device.
-        this.map.setView([position.coords.latitude, position.coords.longitude], 15)
-        //// Creates a turf point from the position location coordinates.
-        let turfPoints = turf.points([[position.coords.longitude,position.coords.latitude]]);
+  adjustPosition(position) {
+        // //// This resets the center of the map based on the location position from the device.
+        // this.map.setView([position.coords.latitude, position.coords.longitude], 15)
+        // //// Creates a turf point from the position location coordinates.
+
+        // let turfPoints = turf.points([[position.coords.longitude + 0.01*this.counter,position.coords.latitude ]]);
+        // this.currentPositionPoints = turfPoints
+        // this.lat = position.coords.latitude 
+        // this.lng = position.coords.longitude + 0.01*this.counter
+        let turfPoints = turf.points([[position.coords.longitude,position.coords.latitude ]]);
+        this.currentPositionPoints = turfPoints
+        this.lat = position.coords.latitude 
+        this.lng = position.coords.longitude 
+
         //// This calls the text to speech capabilities of the browser and says the location
-        if(this.sayLocationInLatLong){
-          let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
-          window.speechSynthesis.speak(currentLocationSpeak);
-        }
+        // if(this.sayLocationInLatLong){
+        //   let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
+        //   window.speechSynthesis.speak(currentLocationSpeak);
+        // }
         //// This updates the position on the HTML page.
-        document.getElementById("location").innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+        document.getElementById("location").innerHTML = "Latitude: " + this.lat + "<br>Longitude: " + this.lng;
         //// Add marker for location point onto map:
-        const marker1 = L.marker([position.coords.latitude, position.coords.longitude]).addTo(this.map);
+        this.map.setView([this.lat, this.lng], 15)
+        const marker1 = L.marker([this.lat, this.lng]).addTo(this.map);
+
         //// Call function to see if location in polygons
         // searchWithinPolygonsForPoint(polygons,turfPoints)
-        this.showPositionPoints = turfPoints
+        
       }
+    /**
+   * This function sets markers for the current position on the leaflet map.
+   * @param {object} position, the lat / long current position that is to be added to the map
+   * @returns {undefined} , nothing is returned
+   */
+    showPosition() {
+      //// This resets the center of the map based on the location position from the device.
+      this.currentPositionPoints
+      // this.map.setView([position.coords.latitude, position.coords.longitude], 15)
+      // this.map.setView([this.currentPositionPointsp[0], this.currentPositionPoints[1]], 15)
+      //// Creates a turf point from the position location coordinates.
+      // let turfPoints = turf.points([[position.coords.longitude,position.coords.latitude]]);
+      //// This calls the text to speech capabilities of the browser and says the location
+      if(this.sayLocationInLatLong){
+        // let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
+        let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(this.currentPositionPoints[0])+" latitude and"+Math.trunc(this.currentPositionPoints[1], 15)+" longitudes"); 
+        window.speechSynthesis.speak(currentLocationSpeak);
+      }
+      //// This updates the position on the HTML page.
+      // document.getElementById("location").innerHTML = "Latitude: " + this.currentPositionPoints[0] + "<br>Longitude: " + this.currentPositionPoints[1], 15;
+      //// Add marker for location point onto map:
+      // const marker1 = L.marker([this.currentPositionPoints[0], this.currentPositionPoints[1]]).addTo(this.map);
+      //// Call function to see if location in polygons
+      // searchWithinPolygonsForPoint(polygons,turfPoints)
+      // this.currentPositionPoints = turfPoints
+    }
+  triggerNavigatorGeoLocation(moveNorth=false,moveEast=false){
+    var fakeLocation = false
+    if (fakeLocation){
+      var fakePosition = {
+        "coords": {
+          "longitude": this.dataGlobal[0],
+          "latitude":this.dataGlobal[1]
+        }  
+      }
+      if(moveNorth){
+        this.counter += 1
+        fakePosition["coords"]["latitude"] += 0.01*this.counter
+      }
+      if(moveEast){
+        this.counter += 1
+        fakePosition["coords"]["longitude"] += 0.01*this.counter
+      }
+      this.adjustPosition(fakePosition)
+    }
+    else{
+      var iteration_number = navigator.geolocation.watchPosition(this.adjustPosition);
+    }
+  }
   /* METHODS: from buttons*/
   /**
    * This function kicks off a bunch of things including asking for location, starting speech, setting up noSleep, and the loops.
@@ -123,19 +185,20 @@ class spokenGeoJSON {
    */
   getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     if (navigator.geolocation) {
+      this.triggerNavigatorGeoLocation()
+      // var iteration_number = navigator.geolocation.watchPosition(this.adjustPosition);
       //// We'll assume that the geojson polygons is already loaded.
-      console.log("got into getLocation function before checking if introductionSpeechSaid == false")
+      // console.log("got into getLocation function before checking if introductionSpeechSaid == false")
       //// Change button focus state
       var element = document.getElementById("start");
       element.classList.add("selected");
       var elmentOther =  document.getElementById('stop');
       elmentOther.classList.remove('selected');
+      //// A loop that persists until the introduction spoken words are said      
       while(this.introductionSpeechSaid == false){
         this.speechTool = window.speechSynthesis
         console.log("got into getLocation function and introductionSpeechSaid == false")     
         let introSpeak= new SpeechSynthesisUtterance("Location services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
-        // console.log("startCheckingLocationEveryInterval() on line above")
-        // console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered)
         this.timeIntervalTriggered = true
         console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered)
         window.speechSynthesis.speak(introSpeak);
@@ -143,6 +206,7 @@ class spokenGeoJSON {
         this.introductionSpeechSaid = true
       }
         console.log("got into getLocation function and introductionSpeechSaid != false.")
+        //// These start the insideLoopFunction() with an interval of 10 seconds
         this.interval = function(){
             return setInterval(function() {
               this.insideLoopFunction();
@@ -151,6 +215,8 @@ class spokenGeoJSON {
     } else {
       x.innerHTML = "Geolocation is not supported by this browser.";
     }
+    //// Uses the noSleep script brought in via script tag in html document to stop browser from falling asleep 
+    //// when you do not interact with the screen.
     var noSleep = "notActivated"
     try {
       noSleep = new NoSleep();
@@ -169,46 +235,47 @@ class spokenGeoJSON {
    * @returns {undefined} , nothing is returned
    */
   insideLoopFunction(){
+    
     //var position = navigator.geolocation.watchPosition(showPosition);
-    var position = navigator.geolocation.getCurrentPosition(this.showPosition);
-    console.log("navigator value in insideLoopFunction",this.position)
-    console.log('test global variable showPositionPoints',this.showPositionPoints)
-    var turfPoints = this.showPositionPoints
+    //// navigator.geolocation.getCurrentPosition() gets the current position when this is called and then sends the position
+    //// to the function that is the argument this.showPosition(). 
+    //// getCurrentPosition
+    // var iteration_number = navigator.geolocation.watchPosition(this.adjustPosition);
+    // console.log("navigator value in insideLoopFunction",iteration_number," which should be the same as...")
+    console.log('test global variable currentPositionPoints',this.currentPositionPoints)
+    var turfPoints = this.currentPositionPoints
     console.log("turfPoint",turfPoints)
     // console.log("Polygons",this.polygons)
     var numberPolygons = this.polygons.features.length
     console.log("number of polygons",numberPolygons)
     console.log('Polygons.features 0',this.polygons.features[0])
+    //// Checks each polygon to see if the point is within one of them. 
+    //// Changes var newLocationState to "inside" if inside at least one.
     var newLocationState = "outside"
     for (let i = 0; i < numberPolygons-1; i++) {
       try {
-        var searchWithin = turf.polygon(polygons.features[i].geometry.coordinates);
+        var searchWithin = turf.polygon(this.polygons.features[i].geometry.coordinates);
         var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
         if(ptsWithin.features.length != 0){
-          this.newLocationState = "inside"
+          newLocationState = "inside"
           console.log("new location is within this polyon",ptsWithin);
-          //// This calls the text to speech capabilities of the browser and says a user is within the floodplain
-        }
-        else{
-          //newLocationState = "outside"
-          // console.log("new location is within this polyon",ptsWithin);
         }
       }
       catch(err){
-        console.log("error in searchWithiPolygonsForPoint function =",err)
+        console.log("error in insideLoopFunction() function, which is:",err)
       }
     }
+    //// If new location is same as old location state, "outside" or "inside" then this evaluates as true.
     if(newLocationState == this.isLocationWithinOneFloodplainPolygon){
       //// if states are same, do nothing
-     console.log("In function checkLocationStateAndUpdate(), newLocationState == isLocationWithinOneFloodplainPolygon")
-     console.log("This means no change in location state, which is: ",this.isLocationWithinOneFloodplainPolygon, "floodplain")
+     console.log("In insideLoop function, var newLocationState == this.isLocationWithinOneFloodplainPolygon")
+     console.log("This means no change in location state, which was last: ",this.isLocationWithinOneFloodplainPolygon, "floodplain. And current is ",newLocationState)
+     //// This part only triggers if this.sayEveryMeasurement == True.
      if(this.sayEveryMeasurement){
        if(newLocationState == "outside"){
         let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is still outside the floodplain."); 
-        console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
-        this.speechTool.speak(notWithinFloodplainSpeak);
-  
-         
+        // console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+        this.speechTool.speak(notWithinFloodplainSpeak);     
        }
        else if(newLocationState == "inside"){
         let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is still within the floodplain."); 
@@ -225,14 +292,14 @@ class spokenGeoJSON {
       
       ///// then say new location state
       if(newLocationState == "inside"){
-          let withinFloodplainSpeak = new SpeechSynthesisUtterance("Note, you are within the floodplain."); 
+          let withinFloodplainSpeak = new SpeechSynthesisUtterance("Note, you are now within the floodplain."); 
           this.speechTool.speak(withinFloodplainSpeak);
       }
       else{
           console.log("newLocationState ",newLocationState )
           console.log("isLocationWithinOneFloodplainPolygon ",this.isLocationWithinOneFloodplainPolygon )
-          let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("You are not in the floodplain."); 
-          console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+          let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Note, you are not in the floodplain."); 
+          // console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
           this.speechTool.speak(notWithinFloodplainSpeak);
       }
       ///// then update new state in variablew location state
