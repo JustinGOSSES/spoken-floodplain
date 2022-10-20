@@ -40,17 +40,20 @@ class spokenGeoJSON {
     this.locationState = "noLocationKnownYet"; //// outsideFloodplain, floodplain500yr, floodplain100yr, floodway
     this.isLocationWithinOneFloodplainPolygon = false;
     /* PROPERTIES: speaking */
-    this.introductionSpeechSaid = false;
+    this.introductionSpeechSaid = false; //// Tracks a state of whether introductury text has been said yet.
     this.sayLocationInLatLong = false;
     this.speechTool = window.speechSynthesis;
     this.withinFloodplainSpeak = "none"; //// This is a placeholder for a speechSynthesis object
     this.notWithinFloodplainSpeak = "none"; //// This is a placeholder for a speechSynthesis object
-    this.sayEveryMeasurement = true;
+    this.sayEveryMeasurement = false;
     /* PROPERTIES: timing */
-    this.timeIntervalTriggered = false;  //// Tracks a state of whether introductury text has been said yet.
+    this.timeIntervalTriggered = false;  
     this.interval = "";
     this.showPosition = this.showPosition.bind(this)
     this.adjustPosition = this.adjustPosition.bind(this)
+    this.triggerNavigatorGeoLocation= this.triggerNavigatorGeoLocation.bind(this)
+    this.insideLoopFunction = this.insideLoopFunction.bind(this)
+    // this.setInterval = setInterval.bind(this)
     this.counter = 0
   }
     // //////////////// METHODS //////////////////////////
@@ -122,11 +125,73 @@ class spokenGeoJSON {
         //// Add marker for location point onto map:
         this.map.setView([this.lat, this.lng], 15)
         const marker1 = L.marker([this.lat, this.lng]).addTo(this.map);
-
+        //////////
+        console.log('test global variable currentPositionPoints',this.currentPositionPoints)
+        turfPoints = this.currentPositionPoints
+        console.log("turfPoint",turfPoints)
+        // console.log("Polygons",this.polygons)
+        var numberPolygons = this.polygons.features.length
+        console.log("number of polygons",numberPolygons)
+        console.log('Polygons.features 0',this.polygons.features[0])
+        //// Checks each polygon to see if the point is within one of them. 
+        //// Changes var newLocationState to "inside" if inside at least one.
         //// Call function to see if location in polygons
         // searchWithinPolygonsForPoint(polygons,turfPoints)
-        
+        var newLocationState = "outside"
+        for (let i = 0; i < numberPolygons-1; i++) {
+          try {
+            var searchWithin = turf.polygon(this.polygons.features[i].geometry.coordinates);
+            var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
+            if(ptsWithin.features.length != 0){
+              newLocationState = "inside"
+              console.log("new location is within this polyon",ptsWithin);
+            }
+          }
+          catch(err){
+            console.log("error in insideLoopFunction() function, which is:",err)
+          }
+        }
+            //// If new location is same as old location state, "outside" or "inside" then this evaluates as true.
+    if(newLocationState == this.isLocationWithinOneFloodplainPolygon){
+      //// if states are same, do nothing
+     console.log("In insideLoop function, var newLocationState == this.isLocationWithinOneFloodplainPolygon")
+     console.log("This means no change in location state, which was last: ",this.isLocationWithinOneFloodplainPolygon, "floodplain. And current is ",newLocationState)
+     //// This part only triggers if this.sayEveryMeasurement == True.
+     if(this.sayEveryMeasurement){
+       if(newLocationState == "outside"){
+        let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is still outside the floodplain."); 
+        // console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+        this.speechTool.speak(notWithinFloodplainSpeak);     
+       }
+       else if(newLocationState == "inside"){
+        let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is still within the floodplain."); 
+         this.speechTool.speak(withinFloodplainSpeak);
+       }
+       else{
+        let withinFloodplainSpeak = new SpeechSynthesisUtterance("Your recently measured location is not expected by the program with a value of",newLocationState); 
+         this.speechTool.speak(withinFloodplainSpeak);
+       }
+     }
+    }
+    //// if states different
+    else{
+      
+      ///// then say new location state
+      if(newLocationState == "inside"){
+          let withinFloodplainSpeak = new SpeechSynthesisUtterance("Note, you are now within the floodplain."); 
+          this.speechTool.speak(withinFloodplainSpeak);
       }
+      else{
+          console.log("newLocationState ",newLocationState )
+          console.log("isLocationWithinOneFloodplainPolygon ",this.isLocationWithinOneFloodplainPolygon )
+          let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Note, you are not in the floodplain."); 
+          // console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
+          this.speechTool.speak(notWithinFloodplainSpeak);
+      }
+      ///// then update new state in variablew location state
+    }
+    this.isLocationWithinOneFloodplainPolygon = newLocationState
+  }
     /**
    * This function sets markers for the current position on the leaflet map.
    * @param {object} position, the lat / long current position that is to be added to the map
@@ -153,8 +218,9 @@ class spokenGeoJSON {
       // searchWithinPolygonsForPoint(polygons,turfPoints)
       // this.currentPositionPoints = turfPoints
     }
-  triggerNavigatorGeoLocation(moveNorth=false,moveEast=false){
-    var fakeLocation = false
+  triggerNavigatorGeoLocation(moveNorth=true,moveEast=false){
+    console.log('triggered function triggerNavigatorGeoLocation() and argument moveNorth = ', moveNorth," and argument moveEast =",moveEast)
+    var fakeLocation = true
     if (fakeLocation){
       var fakePosition = {
         "coords": {
@@ -185,7 +251,7 @@ class spokenGeoJSON {
    */
   getLocation(withinFloodplainSpeak,notWithinFloodplainSpeak) {
     if (navigator.geolocation) {
-      this.triggerNavigatorGeoLocation()
+      
       // var iteration_number = navigator.geolocation.watchPosition(this.adjustPosition);
       //// We'll assume that the geojson polygons is already loaded.
       // console.log("got into getLocation function before checking if introductionSpeechSaid == false")
@@ -199,19 +265,18 @@ class spokenGeoJSON {
         this.speechTool = window.speechSynthesis
         console.log("got into getLocation function and introductionSpeechSaid == false")     
         let introSpeak= new SpeechSynthesisUtterance("Location services activated."); //If you do not want to be asked again, be sure to click the remember this decision checkmark. 
-        this.timeIntervalTriggered = true
-        console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered)
+        console.log("timeIntervalTriggered is set to:",this.timeIntervalTriggered, "A")
         window.speechSynthesis.speak(introSpeak);
         this.insideLoopFunction()
         this.introductionSpeechSaid = true
+        this.triggerNavigatorGeoLocation()
       }
         console.log("got into getLocation function and introductionSpeechSaid != false.")
         //// These start the insideLoopFunction() with an interval of 10 seconds
-        this.interval = function(){
-            return setInterval(function() {
-              this.insideLoopFunction();
-            }, 10000)
-          }
+        this.triggerNavigatorGeoLocation()
+        this.interval = setInterval(
+          this.insideLoopFunction.bind(this),1000
+          )
     } else {
       x.innerHTML = "Geolocation is not supported by this browser.";
     }
@@ -235,14 +300,13 @@ class spokenGeoJSON {
    * @returns {undefined} , nothing is returned
    */
   insideLoopFunction(){
-    
     //var position = navigator.geolocation.watchPosition(showPosition);
     //// navigator.geolocation.getCurrentPosition() gets the current position when this is called and then sends the position
     //// to the function that is the argument this.showPosition(). 
     //// getCurrentPosition
     // var iteration_number = navigator.geolocation.watchPosition(this.adjustPosition);
     // console.log("navigator value in insideLoopFunction",iteration_number," which should be the same as...")
-    console.log('test global variable currentPositionPoints',this.currentPositionPoints)
+    console.log('Within insideLoopFunction() the test global variable currentPositionPoints',this.currentPositionPoints)
     var turfPoints = this.currentPositionPoints
     console.log("turfPoint",turfPoints)
     // console.log("Polygons",this.polygons)
@@ -251,20 +315,26 @@ class spokenGeoJSON {
     console.log('Polygons.features 0',this.polygons.features[0])
     //// Checks each polygon to see if the point is within one of them. 
     //// Changes var newLocationState to "inside" if inside at least one.
-    var newLocationState = "outside"
-    for (let i = 0; i < numberPolygons-1; i++) {
-      try {
-        var searchWithin = turf.polygon(this.polygons.features[i].geometry.coordinates);
-        var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
-        if(ptsWithin.features.length != 0){
-          newLocationState = "inside"
-          console.log("new location is within this polyon",ptsWithin);
-        }
-      }
-      catch(err){
-        console.log("error in insideLoopFunction() function, which is:",err)
-      }
-    }
+    // var newLocationState = "outside"
+    // for (let i = 0; i < numberPolygons-1; i++) {
+    //   try {
+    //     var searchWithin = turf.polygon(this.polygons.features[i].geometry.coordinates);
+    //     var ptsWithin = turf.pointsWithinPolygon(turfPoints, searchWithin);
+    //     if(ptsWithin.features.length != 0){
+    //       newLocationState = "inside"
+    //       console.log("new location is within this polyon",ptsWithin);
+    //     }
+    //   }
+    //   catch(err){
+    //     console.log("error in insideLoopFunction() function, which is:",err)
+    //   }
+    // }
+    ////////////////  REWRITE THIS FUNCTION TO DO THIS !!!!!!!!!!
+    //// This function should only be triggered X seconds after the last spoken message. 
+    //// It should confirm if last measured location is the same or different than last spoken location. 
+    //// Then depending on if same or differnet and location state, say a message.
+    //// And finally reset count on when last message said.
+    ///////////////
     //// If new location is same as old location state, "outside" or "inside" then this evaluates as true.
     if(newLocationState == this.isLocationWithinOneFloodplainPolygon){
       //// if states are same, do nothing
