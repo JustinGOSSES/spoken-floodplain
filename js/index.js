@@ -24,14 +24,14 @@ class spokenGeoJSON {
   constructor(divIdForMapString) {
     ////////////////  PROPERTIES //////////////////////////
     /* PROPERTIES: leaflet map */
-    this.polygons = "";
-    this.dataGlobal = [-95.498,29.7604]; //// This is the center of the map when first created in order of [long, lat]
+    this.divIDForMap = divIdForMapString;  //// The divID of a div on the html page you want the leaflet.js map to appear
+    this.polygons = "";  //// Data from geojson is put into this variable.
+    this.mapCenterAtStart= [-95.498,29.7604]; //// This is the center of the map when first created in order of [long, lat]
     this.currentPositionPoints = ""; //// These become turf points
-    this.config = {minZoom: 2,maxZoom: 18,};  // magnification with which the map will start
-    this.zoom = 10;
-    this.lat = this.dataGlobal[1];
-    this.lng = this.dataGlobal[0];
-    this.divIDForMap = divIdForMapString;
+    this.config = {minZoom: 2,maxZoom: 18,};  //// min and max magnification of map
+    this.zoom = 10; //// magnification with which the map will start
+    this.lat = this.mapCenterAtStart[1];
+    this.lng = this.mapCenterAtStart[0];
     this.map = L.map(this.divIDForMap, this.config).setView([this.lat, this.lng], this.zoom);
     // Used to load and display tile layers on the map
     // Most tile servers require attribution, which you can set under `Layer`
@@ -54,11 +54,9 @@ class spokenGeoJSON {
     /* PROPERTIES: timing */
     this.timeIntervalTriggered = false;  
     this.interval = "";
-    this.showPosition = this.showPosition.bind(this)
     this.adjustPosition = this.adjustPosition.bind(this)
     this.triggerNavigatorGeoLocation= this.triggerNavigatorGeoLocation.bind(this)
     this.insideLoopFunction = this.insideLoopFunction.bind(this)
-    // this.setInterval = setInterval.bind(this)
     this.counter = 0
   }
     // //////////////// METHODS //////////////////////////
@@ -117,29 +115,16 @@ class spokenGeoJSON {
      }
   }
   /**
-   * This function sets markers for the current position on the leaflet map.
+   * This function sets markers for the current position on the leaflet map and sees if the current position is inside the polygons of the geojson.
    * @param {object} position, the lat / long current position that is to be added to the map
    * @returns {undefined} , nothing is returned
    */
   adjustPosition(position) {
-        // //// This resets the center of the map based on the location position from the device.
-        // this.map.setView([position.coords.latitude, position.coords.longitude], 15)
-        // //// Creates a turf point from the position location coordinates.
-
-        // let turfPoints = turf.points([[position.coords.longitude + 0.01*this.counter,position.coords.latitude ]]);
-        // this.currentPositionPoints = turfPoints
-        // this.lat = position.coords.latitude 
-        // this.lng = position.coords.longitude + 0.01*this.counter
         let turfPoints = turf.points([[position.coords.longitude,position.coords.latitude ]]);
+        //// Sets properties with this new location
         this.currentPositionPoints = turfPoints
         this.lat = position.coords.latitude 
         this.lng = position.coords.longitude 
-
-        //// This calls the text to speech capabilities of the browser and says the location
-        // if(this.sayLocationInLatLong){
-        //   let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
-        //   window.speechSynthesis.speak(currentLocationSpeak);
-        // }
         //// This updates the position on the HTML page.
         document.getElementById("location").innerHTML = "Latitude: " + this.lat + "<br>Longitude: " + this.lng;
         //// Add marker for location point onto map:
@@ -213,8 +198,8 @@ class spokenGeoJSON {
           this.lastSpokenStateAtTime = new Date()
       }
       else if(this.lastMeasuredLocationState == "outside"){
-          console.log("this.lastSpokenState ",this.lastSpokenState )
-          console.log("lastMeasuredLocationState ",this.lastMeasuredLocationState )
+          // console.log("this.lastSpokenState ",this.lastSpokenState )
+          // console.log("lastMeasuredLocationState ",this.lastMeasuredLocationState )
           let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Note, you are not in the floodplain."); 
           // console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
           this.speechTool.speak(notWithinFloodplainSpeak);
@@ -222,8 +207,8 @@ class spokenGeoJSON {
           this.lastSpokenStateAtTime = new Date()
       }
       else{
-          console.log("this.lastSpokenState ",this.lastSpokenState )
-          console.log("lastMeasuredLocationState ",this.lastMeasuredLocationState )
+          // console.log("this.lastSpokenState ",this.lastSpokenState )
+          // console.log("lastMeasuredLocationState ",this.lastMeasuredLocationState )
           let notWithinFloodplainSpeak = new SpeechSynthesisUtterance("Note, your location is,",this.lastMeasuredLocationState); 
           // console.log("type notWithinFloodplainSpeak",typeof(notWithinFloodplainSpeak))
           this.speechTool.speak(notWithinFloodplainSpeak);
@@ -233,47 +218,33 @@ class spokenGeoJSON {
       ///// then update new state in variablew location state
     }
   }
-    /**
-   * This function sets markers for the current position on the leaflet map.
-   * @param {object} position, the lat / long current position that is to be added to the map
-   * @returns {undefined} , nothing is returned
+  /**
+   * This function triggers the adjustPosition(position) function with a position. The position argument is either one from the navigator browswer API or can be fake. 
+   * This function creates the fake location based on the three optional arguments of moveDirection, fakeLocation, and moveAmountInDecimals to create a position.
+   * 
+   * EXAMPLE: If you wanted to test out moving from the current location without actually moving the device, 
+   * you would call in the browswer's console: spokenGeoJSON_Harris_global.triggerNavigatorGeoLocation(move="west",fakeLocation=false,moveAmountInDecimals=0.001)
+   * 
+   * @param {string} moveDirection, Default value is false, whic triggers no movement. Other values possible are "north","south","west", and "east".
+   * @param {string} fakeLocation, Whether the starting location should be the current location measured by navigator.getLocation or this.mapCenterAtStart property used on page start.
+   * @param {object} moveAmountInDecimals, Default value is 0.1. Any float value like 0.001 or 1.0 will work.
+   * @returns {undefined} , nothing is returned. However, the adjustPosition(position) function is triggered.
    */
-    showPosition() {
-      //// This resets the center of the map based on the location position from the device.
-      this.currentPositionPoints
-      // this.map.setView([position.coords.latitude, position.coords.longitude], 15)
-      // this.map.setView([this.currentPositionPointsp[0], this.currentPositionPoints[1]], 15)
-      //// Creates a turf point from the position location coordinates.
-      // let turfPoints = turf.points([[position.coords.longitude,position.coords.latitude]]);
-      //// This calls the text to speech capabilities of the browser and says the location
-      if(this.sayLocationInLatLong){
-        // let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(position.coords.latitude)+" latitude and"+Math.trunc(position.coords.longitude)+" longitudes"); 
-        let currentLocationSpeak = new SpeechSynthesisUtterance("Your location is "+Math.trunc(this.currentPositionPoints[0])+" latitude and"+Math.trunc(this.currentPositionPoints[1], 15)+" longitudes"); 
-        window.speechSynthesis.speak(currentLocationSpeak);
-      }
-      //// This updates the position on the HTML page.
-      // document.getElementById("location").innerHTML = "Latitude: " + this.currentPositionPoints[0] + "<br>Longitude: " + this.currentPositionPoints[1], 15;
-      //// Add marker for location point onto map:
-      // const marker1 = L.marker([this.currentPositionPoints[0], this.currentPositionPoints[1]]).addTo(this.map);
-      //// Call function to see if location in polygons
-      // searchWithinPolygonsForPoint(polygons,turfPoints)
-      // this.currentPositionPoints = turfPoints
-    }
-  triggerNavigatorGeoLocation(moveDirection=false,fakeLocation=false){
+  triggerNavigatorGeoLocation(moveDirection=false,fakeLocation=false,moveAmountInDecimals=0.1){
     if(moveDirection==false && fakeLocation==false){
       navigator.geolocation.watchPosition(this.adjustPosition);
     }
     var fakePosition = {
       "coords": {
-        "longitude": this.dataGlobal[0],
-        "latitude":this.dataGlobal[1]
+        "longitude": this.mapCenterAtStart[0],
+        "latitude":this.mapCenterAtStart[1]
       }  
     }
     if (fakeLocation != false){
       fakePosition = {
         "coords": {
-          "longitude": this.dataGlobal[0],
-          "latitude":this.dataGlobal[1]
+          "longitude": this.mapCenterAtStart[0],
+          "latitude":this.mapCenterAtStart[1]
         }  
       }
     }
@@ -284,19 +255,19 @@ class spokenGeoJSON {
  
     if(moveDirection=="north"){
       this.counter += 1
-      fakePosition["coords"]["latitude"] += 0.01*this.counter
+      fakePosition["coords"]["latitude"] += moveAmountInDecimals*this.counter
     }
     if(moveDirection=="east"){
       this.counter += 1
-      fakePosition["coords"]["longitude"] += 0.01*this.counter
+      fakePosition["coords"]["longitude"] += moveAmountInDecimals*this.counter
     }
     if(moveDirection=="south"){
       this.counter += 1
-      fakePosition["coords"]["latitude"] -= 0.01*this.counter
+      fakePosition["coords"]["latitude"] -= moveAmountInDecimals*this.counter
     }
     if(moveDirection=="west"){
       this.counter += 1
-      fakePosition["coords"]["longitude"] -= 0.01*this.counter
+      fakePosition["coords"]["longitude"] -= moveAmountInDecimals*this.counter
     }
     this.adjustPosition(fakePosition)
   }
@@ -325,11 +296,10 @@ class spokenGeoJSON {
         this.triggerNavigatorGeoLocation()
         // this.insideLoopFunction()
         this.introductionSpeechSaid = true
-        
       }
         console.log("got into getLocation function and introductionSpeechSaid != false.")
         //// These start the insideLoopFunction() with an interval of 10 seconds
-        this.triggerNavigatorGeoLocation()
+        // this.triggerNavigatorGeoLocation()
         this.interval = setInterval(
           this.insideLoopFunction.bind(this),this.speakHowOftenIfNotEveryInSeconds*1000 //// miliseconds, so 10000 milisecondss = 10 seconds *1000
           )
