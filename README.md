@@ -14,12 +14,15 @@ Although this implimentation is specific to floodplains in Harris County (Housto
 
 ## live site 
 
-https://justingosses.github.io/spoken-floodplain/
+https://justingosses.github.io/spoken-floodplain//docs/#spokengeojson
+
 
 Slides following the Houston Hackathon template: https://docs.google.com/presentation/d/1kz7w97LEenhE0t2bj9gjVpCtbpgohDKEAaqHmn88WYE/edit?usp=sharing
 
 This was built as part of the <a href="https://houstonhackathon2022.devpost.com/">Houston Hackathon</a> by the participants listed <a href="https://devpost.com/software/spoken-floodplain">here</a>. 
 
+### Code Documentation 
+https://justingosses.github.io/spoken-floodplain/
 
 ## User Experience
 We could imagine the user is driving around during house shopping.
