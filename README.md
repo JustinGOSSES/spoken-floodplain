@@ -120,3 +120,10 @@ Due to the potential decisions made with this data, there will need to be a disc
 
 # Documentation
 Some functions are starting to be documented in the docs/index.html file
+=======
+## Contributors 
+- Justin Gosses: Ideation, testing on iOS, and JavaScript.
+- Lester Lee: Product direction, writing, and communications.
+- Manish Paudel: JavaScript and analytics.
+- Rawaa Alsafar: User testing on Android.
+- William Falconer: Reduced size of floodplain geojson without loosing any fidelity in the outlines and solved two critical bugs.
