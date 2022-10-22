@@ -22,7 +22,8 @@ Slides following the Houston Hackathon template: https://docs.google.com/present
 This was built as part of the <a href="https://houstonhackathon2022.devpost.com/">Houston Hackathon</a> by the participants listed <a href="https://devpost.com/software/spoken-floodplain">here</a>. 
 
 ### Code Documentation 
-https://justingosses.github.io/spoken-floodplain/
+
+https://justingosses.github.io/spoken-floodplain/docs/index.html
 
 ## User Experience
 We could imagine the user is driving around during house shopping.
@@ -118,8 +119,6 @@ Sometimes people will have location sharing turned off in their browswer as they
 #### Accuracy & Legal Concerns
 Due to the potential decisions made with this data, there will need to be a disclaimer message like on other products with similar data stating that they should only use authoritative and recent data from FEMA before making any engineering or legal decisions.
 
-# Documentation
-Some functions are starting to be documented in the docs/index.html file
 =======
 ## Contributors 
 - Justin Gosses: Ideation, testing on iOS, and JavaScript.
