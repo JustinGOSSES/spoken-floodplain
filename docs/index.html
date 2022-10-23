@@ -41,12 +41,6 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#spokengeojsondividformap'
-                        class='regular pre-open'>
-                        #divIDForMap
-                      </a></li>
-                      
-                      <li><a
                         href='#spokengeojsononeachfeature'
                         class='regular pre-open'>
                         #onEachFeature
@@ -166,7 +160,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L35-L482'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L58-L491'>
       <span>js/index.js</span>
       </a>
     
@@ -181,22 +175,12 @@ of the polygons that make up the geojson.</p>
 <li>It calls leaflet.js, noSleep.js, the SpeecSynthysis browswer API, and the getLocation browser APIs.</li>
 <li>This function can be iniated during a window.addEventListener function that starts on page load.</li>
 <li>Data for the map is added after class object instance initiation.</li>
-<li>Several functions are designed to be called via HTML buttons that control behavior.</li>
-<li>
+</ul>
+<h4>Several functions are designed to be called via HTML buttons that control behavior.</h4>
 <ul>
 <li>getLocation() can be kicked off by a "start" button and it starts location finding and placing markers on the map as well as the loop that runs constantly.</li>
-</ul>
-</li>
-<li>
-<ul>
 <li>stopSpeechUtteranceAndLoop() stops the speaking part but the location finding and map edits continue.</li>
-</ul>
-</li>
-<li>
-<ul>
 <li>changeSpeakingRate() changes how often and when speaking occurs.</li>
-</ul>
-</li>
 </ul>
 <p>To fake movement while testing the application, the   triggerNavigatorGeoLocation(moveDirection=false,fakeLocation=false,moveAmountInDecimals=0.1) function can be used see defintion below.</p>
 
@@ -219,7 +203,10 @@ of the polygons that make up the geojson.</p>
           <div>
             <span class='code bold'>divIdForMapString</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    , This argument is the string value of the divID in the HTML where the leaflet.js map will be placed.
-<p>These are properties of the spokenGeoJSON class function. Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
+<h4>Properties:</h4>
+<p>Currently, all properties of the class object are public and can be populated by simple assignment.
+Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
+<p>These are properties of the spokenGeoJSON class function.</p>
 
           </div>
           
@@ -261,8 +248,140 @@ of the polygons that make up the geojson.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>currentPositionPoints</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : , This property is an object in the format of turf.js points that represents the lat/long of the current position of the device.
+          <span class='code bold'>mapConfig</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , This property is min and max magnification of the map. Default value is [-95.498,29.7604]
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>zoom</span> <code class='quiet'>(integer)</code>
+          : , This property is the initial zoom level of the map
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lat</span> <code class='quiet'>(float)</code>
+          : , This property is a float representing a latitude value. It is initially populated with the map center, but once location tracking is started will reflect the most recent location of the device.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lng</span> <code class='quiet'>(float)</code>
+          : , This property is a float representing a longitude value. It is initially populated with the map center, but once location tracking is started will reflect the most recent location of the device.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>map</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , The leaflet map object that is created by the following code 
+<code>L.map(this.divIDForMap, this.mapConfig).setView([this.lat, this.lng], this.zoom);</code>
+. For this to work, leaflet.js needs to be loaded via a script tag elment already.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tilelayer</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , The tiles for the map background from openstreet map. This can be changed on the fly after class instance creation.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lastSpokenState</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : , A string representing the last location state that triggered speech.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lastMeasuredLocationState</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : , A string representation of the latest measured location state. This means lat/long location converted into a location state by comparing the location to polygons in the geojson.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lastSpokenStateAtTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , A unix date time object created by 
+<code>new Date()</code>
+ code. This is updated on class instance creation and whenever a location state has been spoken. This time is compared to later times to determine if enough time has passed to speak again when location state is spoken at some interval as opposed to only when a new location state is detected.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>introductionSpeechSaid</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : , A true or false boolean value for whether or not the introductury text has been said yet. This starts off as false and converts to true once the introductury text has been said. It should be converted back to false if speaking and/or location has been stopped due to button bush and then restarted via a different button push.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sayLocationInLatLong</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , TODO
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>speechTool</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , This is the result of the code 
+<code>window.speechSynthesis</code>
+ and creates a speech synthesis object available for use by any function in the class, so it doesn't have to recreated each time. Speech synthesis is a native browser capability.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>withinFloodplainSpeak</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , This is a placeholder for a speechSynthesis object
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>notWithinFloodplainSpeak</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : , This is a placeholder for a speechSynthesis object
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sayEveryMeasurement</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : ,  TODO
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>speakHowOftenIfNotEveryInSeconds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : ,  TODO
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>speechStoppedDueToButtonClick</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : ,  TODO
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>timeIntervalTriggered</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : ,  TODO
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>interval</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+          : ,  TODO
 
           
         </div>
@@ -292,63 +411,6 @@ of the polygons that make up the geojson.</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='spokengeojsondividformap'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>divIDForMap</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L42-L42'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  
-    <div class='pre p1 fill-light mt0'>divIDForMap</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='spokengeojsononeachfeature'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -363,7 +425,7 @@ of the polygons that make up the geojson.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L98-L127'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L107-L136'>
       <span>js/index.js</span>
       </a>
     
@@ -452,7 +514,7 @@ of the polygons that make up the geojson.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L133-L142'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L142-L151'>
       <span>js/index.js</span>
       </a>
     
@@ -532,7 +594,7 @@ of the polygons that make up the geojson.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L148-L161'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L157-L170'>
       <span>js/index.js</span>
       </a>
     
@@ -612,7 +674,7 @@ of the polygons that make up the geojson.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L168-L195'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L177-L204'>
       <span>js/index.js</span>
       </a>
     
@@ -692,7 +754,7 @@ of the polygons that make up the geojson.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L208-L212'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L217-L221'>
       <span>js/index.js</span>
       </a>
     
@@ -786,7 +848,7 @@ the location state value of the last measured position. This might be "outside" 
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L225-L273'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L234-L282'>
       <span>js/index.js</span>
       </a>
     
@@ -862,7 +924,7 @@ Properties that it calls upon to decide what to speak include:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L286-L325'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L295-L334'>
       <span>js/index.js</span>
       </a>
     
@@ -966,7 +1028,7 @@ you would call in the browswer's console: spokenGeoJSON_Harris_global.triggerNav
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L333-L373'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L342-L382'>
       <span>js/index.js</span>
       </a>
     
@@ -1055,7 +1117,7 @@ you would call in the browswer's console: spokenGeoJSON_Harris_global.triggerNav
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L381-L383'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L390-L392'>
       <span>js/index.js</span>
       </a>
     
@@ -1122,7 +1184,7 @@ at some interval set via this.speakHowOftenIfNotEveryInSeconds property.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L393-L412'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L402-L421'>
       <span>js/index.js</span>
       </a>
     
@@ -1205,7 +1267,7 @@ TODO Explain it more!</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L420-L457'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L429-L466'>
       <span>js/index.js</span>
       </a>
     
@@ -1295,7 +1357,7 @@ TODO Explain it more!</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L465-L480'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L474-L489'>
       <span>js/index.js</span>
       </a>
     
@@ -1383,7 +1445,7 @@ TODO Explain it more!</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L493-L518'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L502-L527'>
       <span>js/index.js</span>
       </a>
     
@@ -1463,7 +1525,7 @@ when the class instance was first initiated.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/0e7906ef8bbc1272b6303b2ef7ead373c169e2a5/js/index.js#L525-L527'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L534-L536'>
       <span>js/index.js</span>
       </a>
     

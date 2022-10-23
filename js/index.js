@@ -12,21 +12,44 @@ spokenGeoJSON_Harris_global = ""
 * - It calls leaflet.js, noSleep.js, the SpeecSynthysis browswer API, and the getLocation browser APIs.
 * - This function can be iniated during a window.addEventListener function that starts on page load.
 * - Data for the map is added after class object instance initiation.
-* - Several functions are designed to be called via HTML buttons that control behavior.
-* - - getLocation() can be kicked off by a "start" button and it starts location finding and placing markers on the map as well as the loop that runs constantly.
-* - - stopSpeechUtteranceAndLoop() stops the speaking part but the location finding and map edits continue.
-* - - changeSpeakingRate() changes how often and when speaking occurs.
+* #### Several functions are designed to be called via HTML buttons that control behavior.
+* - getLocation() can be kicked off by a "start" button and it starts location finding and placing markers on the map as well as the loop that runs constantly.
+* - stopSpeechUtteranceAndLoop() stops the speaking part but the location finding and map edits continue.
+* - changeSpeakingRate() changes how often and when speaking occurs.
 * 
 * To fake movement while testing the application, the   triggerNavigatorGeoLocation(moveDirection=false,fakeLocation=false,moveAmountInDecimals=0.1) function can be used see defintion below.
 * @param {string} divIdForMapString, This argument is the string value of the divID in the HTML where the leaflet.js map will be placed.
 * 
-* These are properties of the spokenGeoJSON class function. Many of the them are changed by internal methods of the spokenGeoJSON class.
-      * @property This are properties:
+* #### Properties:
+* Currently, all properties of the class object are public and can be populated by simple assignment. 
+* Many of the them are changed by internal methods of the spokenGeoJSON class.
+* 
+* These are properties of the spokenGeoJSON class function. 
       * @property {string} divIDForMap, This property is the divID of a div on the html page you want the leaflet.js map to appear. It accepts the one argument used to initiated the class, which is the string of the Div element where the map will appear.
       * @property {object} polygons, This property holds data from geojson that is put into the leaflet.js map
       * @property {array} mapCenterAtStart, This property is the center of the map when first created in order of [long, lat]. Default is [-95.498,29.7604]
       * @property {object} currentPositionPoints, This property is an object in the format of turf.js points that represents the lat/long of the current position of the device.
-      * @property {object} currentPositionPoints, This property is an object in the format of turf.js points that represents the lat/long of the current position of the device.
+      * @property {object} mapConfig, This property is min and max magnification of the map. Default value is [-95.498,29.7604]
+      * @property {integer} zoom, This property is the initial zoom level of the map
+      * @property {float} lat, This property is a float representing a latitude value. It is initially populated with the map center, but once location tracking is started will reflect the most recent location of the device.
+      * @property {float} lng, This property is a float representing a longitude value. It is initially populated with the map center, but once location tracking is started will reflect the most recent location of the device.
+      * @property {object} map, The leaflet map object that is created by the following code `L.map(this.divIDForMap, this.mapConfig).setView([this.lat, this.lng], this.zoom);`. For this to work, leaflet.js needs to be loaded via a script tag elment already.
+      * @property {object} tilelayer, The tiles for the map background from openstreet map. This can be changed on the fly after class instance creation.
+      * @property {string} lastSpokenState, A string representing the last location state that triggered speech.
+      * @property {string} lastMeasuredLocationState, A string representation of the latest measured location state. This means lat/long location converted into a location state by comparing the location to polygons in the geojson.
+      * @property {object} lastSpokenStateAtTime, A unix date time object created by `new Date()` code. This is updated on class instance creation and whenever a location state has been spoken. This time is compared to later times to determine if enough time has passed to speak again when location state is spoken at some interval as opposed to only when a new location state is detected.
+      * @property {object} this.counter, This is a simple counter used when creating a fake location in the triggerNavigatorGeoLocation function.
+      * @property {boolean} introductionSpeechSaid, A true or false boolean value for whether or not the introductury text has been said yet. This starts off as false and converts to true once the introductury text has been said. It should be converted back to false if speaking and/or location has been stopped due to button bush and then restarted via a different button push.
+      * @property {object} sayLocationInLatLong , TODO
+      * @property {object} speechTool, This is the result of the code `window.speechSynthesis` and creates a speech synthesis object available for use by any function in the class, so it doesn't have to recreated each time. Speech synthesis is a native browser capability.
+      * @property {object} withinFloodplainSpeak , This is a placeholder for a speechSynthesis object
+      * @property {object} notWithinFloodplainSpeak, This is a placeholder for a speechSynthesis object
+      * @property {object} sayEveryMeasurement,  TODO
+      * @property {object} speakHowOftenIfNotEveryInSeconds,  TODO
+      * @property {object} speechStoppedDueToButtonClick,  TODO
+      * @property {object} timeIntervalTriggered,  TODO
+      * @property {object} interval ,  TODO
+      
       * @public
       * 
 * @returns {undefined} , nothing is returned
@@ -36,33 +59,18 @@ class spokenGeoJSON {
   constructor(divIdForMapString) {
     ////////////////  PROPERTIES //////////////////////////
     /* PROPERTIES: leaflet map */
-    /**
-      
-    */
     this.divIDForMap = divIdForMapString;  //// The divID of a div on the html page you want the leaflet.js map to appear
-    // /** 
-    // * @property {object} polygons, This property holds data from geojson that is put into the leaflet.js map
-    // * @public
-    // */
     this.polygons = "";  //// Data from geojson is put into this variable.
-    // /** 
-    // * @property {array} mapCenterAtStart, This property is the center of the map when first created in order of [long, lat]. Default is [-95.498,29.7604]
-    // * @public
-    // */
     this.mapCenterAtStart= [-95.498,29.7604]; 
-    // /** 
-    // // * @property {object} currentPositionPoints, This property is an object in the format of turf.js points that represents the lat/long of the current position of the device.
-    // // * @public
-    // // */
     this.currentPositionPoints = {}; 
-    this.mapConfig = {minZoom: 2,maxZoom: 18,};  //// min and max magnification of map
+    this.mapConfig = {minZoom: 2,maxZoom: 18,};  //// 
     this.zoom = 10; //// magnification with which the map will start
     this.lat = this.mapCenterAtStart[1];
     this.lng = this.mapCenterAtStart[0];
     this.map = L.map(this.divIDForMap, this.mapConfig).setView([this.lat, this.lng], this.zoom);
     // Used to load and display tile layers on the map
     // Most tile servers require attribution, which you can set under `Layer`
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    this.tilelayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
@@ -70,6 +78,7 @@ class spokenGeoJSON {
     this.lastSpokenState = "noLocationKnownYet"; //// outside, inside ///floodplain500yr, floodplain100yr, floodway
     this.lastMeasuredLocationState = "noLocationKnownYet"; //// values are "outside", "inside"
     this.lastSpokenStateAtTime = new Date();
+    this.counter = 0
     /* PROPERTIES: speaking */
     this.introductionSpeechSaid = false; //// Tracks a state of whether introductury text has been said yet.
     this.sayLocationInLatLong = false;
@@ -85,7 +94,7 @@ class spokenGeoJSON {
     this.adjustPosition = this.adjustPosition.bind(this)
     this.triggerNavigatorGeoLocation= this.triggerNavigatorGeoLocation.bind(this)
     this.insideLoopFunction = this.insideLoopFunction.bind(this)
-    this.counter = 0
+    
   }
   ////////////////// METHODS //////////////////////////
     /* METHODS: map functions*/
