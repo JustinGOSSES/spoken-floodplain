@@ -47,9 +47,21 @@
                       </a></li>
                       
                       <li><a
-                        href='#spokengeojsoncheckifenoughtimehasgonetospeakagain'
+                        href='#spokengeojsongetlocation'
                         class='regular pre-open'>
-                        #checkIfEnoughTimeHasGoneToSpeakAgain
+                        #getLocation
+                      </a></li>
+                      
+                      <li><a
+                        href='#spokengeojsontriggernavigatorgeolocation'
+                        class='regular pre-open'>
+                        #triggerNavigatorGeoLocation
+                      </a></li>
+                      
+                      <li><a
+                        href='#spokengeojsoninsideloopfunction'
+                        class='regular pre-open'>
+                        #insideLoopFunction
                       </a></li>
                       
                       <li><a
@@ -65,33 +77,21 @@
                       </a></li>
                       
                       <li><a
-                        href='#spokengeojsonspeakandupdate'
-                        class='regular pre-open'>
-                        #speakAndUpdate
-                      </a></li>
-                      
-                      <li><a
                         href='#spokengeojsondecidewhattospeak'
                         class='regular pre-open'>
                         #decideWhatToSpeak
                       </a></li>
                       
                       <li><a
-                        href='#spokengeojsontriggernavigatorgeolocation'
+                        href='#spokengeojsoncheckifenoughtimehasgonetospeakagain'
                         class='regular pre-open'>
-                        #triggerNavigatorGeoLocation
+                        #checkIfEnoughTimeHasGoneToSpeakAgain
                       </a></li>
                       
                       <li><a
-                        href='#spokengeojsongetlocation'
+                        href='#spokengeojsonspeakandupdate'
                         class='regular pre-open'>
-                        #getLocation
-                      </a></li>
-                      
-                      <li><a
-                        href='#spokengeojsoninsideloopfunction'
-                        class='regular pre-open'>
-                        #insideLoopFunction
+                        #speakAndUpdate
                       </a></li>
                       
                       <li><a
@@ -104,12 +104,6 @@
                         href='#spokengeojsonchangespeakingrate'
                         class='regular pre-open'>
                         #changeSpeakingRate
-                      </a></li>
-                      
-                      <li><a
-                        href='#spokengeojsonshowerror'
-                        class='regular pre-open'>
-                        #showError
                       </a></li>
                       
                     </ul>
@@ -160,7 +154,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L58-L491'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L60-L461'>
       <span>js/index.js</span>
       </a>
     
@@ -168,13 +162,17 @@
   
 
   <p>This class holds all properties and functions necessary to create a spokenGeoJSON instance.
-A spokenGeoJSON class instance that creates a leaflet.js map which is populated with data from a geojson and then after a button click
-watches the device's location and gives audible statements regarcing the current Location being inside of outside
+A spokenGeoJSON class instance creates a leaflet.js map which is populated with data from a geojson and then after a button click
+watches the device's location and gives audible statements regarding the current Location being inside of outside
 of the polygons that make up the geojson.</p>
+<h4>This class function has the following behaviors:</h4>
 <ul>
-<li>It calls leaflet.js, noSleep.js, the SpeecSynthysis browswer API, and the getLocation browser APIs.</li>
-<li>This function can be iniated during a window.addEventListener function that starts on page load.</li>
-<li>Data for the map is added after class object instance initiation.</li>
+<li>It calls leaflet.js for a map.</li>
+<li>NoSleep.js to stop the page from going to sleep when the user is not touching the screen.</li>
+<li>The browser native SpeechSynthysis API is used to generate speech.</li>
+<li>The device's current location is found using the browser's native getLocation browser API.</li>
+<li>Data for the map is added after class object instance initiation. This is currently being done by a function iniated during a window.addEventListener function that starts on page load.</li>
+<li>The class methods below are approximately but not exactly in the order they are called when in use.</li>
 </ul>
 <h4>Several functions are designed to be called via HTML buttons that control behavior.</h4>
 <ul>
@@ -228,7 +226,7 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>polygons</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : , This property holds data from geojson that is put into the leaflet.js map
+          : , This property holds data from geojson that is put into the leaflet.js map. At class instance creation, it only has an empty string. An outside function must populate it.
 
           
         </div>
@@ -322,8 +320,8 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>sayLocationInLatLong</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : , TODO
+          <span class='code bold'>sayLocationInLatLong</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : , Determines whether lat long is said or not. Default is to not say it where has a value of false.
 
           
         </div>
@@ -352,36 +350,29 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>sayEveryMeasurement</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : ,  TODO
+          <span class='code bold'>sayEveryMeasurement</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : , If false, it only speaks when there is a location state change. If true, you get speach every X unit of time as defined by the property speakHowOftenIfNotEveryInSeconds.
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>speakHowOftenIfNotEveryInSeconds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : ,  TODO
+          <span class='code bold'>speakHowOftenIfNotEveryInSeconds</span> <code class='quiet'>(integer)</code>
+          : , An integer of how many seconds to wait from when a location state is spoken until you say the location state again. This only applies if sayEveryMeasurement is true. Otherwise, the object instance will only speak when a location state has changed. For example, outside a floodplain polygon vs. inside the floodplain polygon.
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>speechStoppedDueToButtonClick</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : ,  TODO
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>timeIntervalTriggered</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : ,  TODO
+          <span class='code bold'>speechStoppedDueToButtonClick</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : , A true or false for whether a button has been pushed to stop speaking. True = no speaking. false = speak when conditions require it based on other configuration.
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>interval</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-          : ,  TODO
+          : , This property holds an object created by calling the native setInterval function that calls the insideLoop function every X time interval. The time interval is set by property speakHowOftenIfNotEveryInSeconds.
 
           
         </div>
@@ -425,7 +416,7 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L107-L136'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L107-L136'>
       <span>js/index.js</span>
       </a>
     
@@ -500,11 +491,11 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='spokengeojsoncheckifenoughtimehasgonetospeakagain'>
+    <div class='border-bottom' id='spokengeojsongetlocation'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>checkIfEnoughTimeHasGoneToSpeakAgain(lastSpokenStateAtTime)</span>
+            <span class='code strong strong truncate'>getLocation(withinFloodplainSpeak, notWithinFloodplainSpeak)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -514,16 +505,16 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L142-L151'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L144-L183'>
       <span>js/index.js</span>
       </a>
     
   </div>
   
 
-  <p>This function checks to see if enough time has gone by to speak again if there is a limit on how often to speak.</p>
+  <p>This function kicks off a bunch of things including asking for location, starting speech, setting up noSleep, and the loops.</p>
 
-    <div class='pre p1 fill-light mt0'>checkIfEnoughTimeHasGoneToSpeakAgain(lastSpokenStateAtTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+    <div class='pre p1 fill-light mt0'>getLocation(withinFloodplainSpeak: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, notWithinFloodplainSpeak: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
   
   
 
@@ -540,88 +531,17 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>lastSpokenStateAtTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , This should be the property of 'this.lastSpokenStateAtTime'
+            <span class='code bold'>withinFloodplainSpeak</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    , a speech utterance ready to go for when the maker is within the floodplain.
 
           </div>
           
         </div>
       
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
-        , Returns a boolean value of true or false. True if enough time has passed to speak.
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='spokengeojsonadjustposition'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>adjustPosition(position)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L157-L170'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>This function sets markers for the current position on the leaflet map and sees if the current position is inside the polygons of the geojson.</p>
-
-    <div class='pre p1 fill-light mt0'>adjustPosition(position: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>position</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , the lat / long current position that is to be added to the map
+            <span class='code bold'>notWithinFloodplainSpeak</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    , a speech utterance ready to go for when the maker is NOT within the floodplain.
 
           </div>
           
@@ -660,256 +580,6 @@ Many of the them are changed by internal methods of the spokenGeoJSON class.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='spokengeojsonchecksiflocationstateshouldchangebasedonnewlocation'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>checksIfLocationStateShouldChangeBasedOnNewLocation(TODO)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L177-L204'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>TODO THIS FUNCTIOn</p>
-
-    <div class='pre p1 fill-light mt0'>checksIfLocationStateShouldChangeBasedOnNewLocation(TODO: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>TODO</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , Default value is 0.1. Any float value like 0.001 or 1.0 will work.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
-        , nothing is returned. However, the adjustPosition(position) function is triggered.
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='spokengeojsonspeakandupdate'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>speakAndUpdate(synthesizedSpeechUtterance, locationState)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L217-L221'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>This function does three things via a single function so these lines don't have to be rewritten
-a bunch of times in decideWhatToSpeak() function.
-It takes in an synthesizedSpeechUtterance object that it calls to speak
-It takes in locationState argument that it makes the new value of this.lastSpokenState
-It finds a new date and updates the value of this.lastSpokenStateAtTime with it.</p>
-
-    <div class='pre p1 fill-light mt0'>speakAndUpdate(synthesizedSpeechUtterance: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, locationState: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>synthesizedSpeechUtterance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , A synthesizedSpeechUtterance object created in decideWhatToSpeak() function
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>locationState</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    , A locationState string created in decideWhatToSpeak() function that represents
-the location state value of the last measured position. This might be "outside" or "inside" for example.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
-        , nothing is returned. However, the adjustPosition(position) function is triggered.
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='spokengeojsondecidewhattospeak'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>decideWhatToSpeak()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L234-L282'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>This function grabs several properties from the class object instance and uses them to decide what should be spoken.
-It then calls the function speakAndUpdate(synthesizedSpeechUtterance,locationState)
-which says the generated speach utterances, updates this.lastSpokenState and this.lastSpokenStateAtTime
-Properties that it calls upon to decide what to speak include:</p>
-<ul>
-<li>this.speechStoppedDueToButtonClick</li>
-<li>this.lastMeasuredLocationState</li>
-<li>this.lastSpokenState</li>
-<li>this.sayEveryMeasurement</li>
-<li>this.checkIfEnoughTimeHasGoneToSpeakAgain</li>
-</ul>
-
-    <div class='pre p1 fill-light mt0'>decideWhatToSpeak(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
-        , nothing is returned. However, the speakAndUpdate() function is called
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='spokengeojsontriggernavigatorgeolocation'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -924,7 +594,7 @@ Properties that it calls upon to decide what to speak include:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L295-L334'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L196-L235'>
       <span>js/index.js</span>
       </a>
     
@@ -1014,95 +684,6 @@ you would call in the browswer's console: spokenGeoJSON_Harris_global.triggerNav
       </div>
     </div>
   
-    <div class='border-bottom' id='spokengeojsongetlocation'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getLocation(withinFloodplainSpeak, notWithinFloodplainSpeak)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L342-L382'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>This function kicks off a bunch of things including asking for location, starting speech, setting up noSleep, and the loops.</p>
-
-    <div class='pre p1 fill-light mt0'>getLocation(withinFloodplainSpeak: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, notWithinFloodplainSpeak: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>withinFloodplainSpeak</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , a speech utterance ready to go for when the maker is within the floodplain.
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>notWithinFloodplainSpeak</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , a speech utterance ready to go for when the maker is NOT within the floodplain.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
-        , nothing is returned
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='spokengeojsoninsideloopfunction'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -1117,7 +698,7 @@ you would call in the browswer's console: spokenGeoJSON_Harris_global.triggerNav
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L390-L392'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L242-L244'>
       <span>js/index.js</span>
       </a>
     
@@ -1170,11 +751,11 @@ at some interval set via this.speakHowOftenIfNotEveryInSeconds property.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='spokengeojsonstopspeechutteranceandloop'>
+    <div class='border-bottom' id='spokengeojsonadjustposition'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>stopSpeechUtteranceAndLoop(reStateActivation)</span>
+            <span class='code strong strong truncate'>adjustPosition(position)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1184,18 +765,16 @@ at some interval set via this.speakHowOftenIfNotEveryInSeconds property.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L402-L421'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L250-L263'>
       <span>js/index.js</span>
       </a>
     
   </div>
   
 
-  <p>TODO --- This function stops the speech utterance calls and sets this.locationState to "noLocationKnownYet"
-It also changes the button styles so it is obvious they were pushed.
-TODO Explain it more!</p>
+  <p>This function sets markers for the current position on the leaflet map and sees if the current position is inside the polygons of the geojson.</p>
 
-    <div class='pre p1 fill-light mt0'>stopSpeechUtteranceAndLoop(reStateActivation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
+    <div class='pre p1 fill-light mt0'>adjustPosition(position: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
   
   
 
@@ -1212,15 +791,401 @@ TODO Explain it more!</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>reStateActivation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
-            = <code>true</code>)</code>
-	    , Default value is true.
+            <span class='code bold'>position</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    , the lat / long current position that is to be added to the map
 
           </div>
           
         </div>
       
     </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
+        , nothing is returned
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='spokengeojsonchecksiflocationstateshouldchangebasedonnewlocation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>checksIfLocationStateShouldChangeBasedOnNewLocation()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L273-L300'>
+      <span>js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>This function checks if the location state should change based on the last measured location state
+the the most recently measured location state.</p>
+<p>It updates the location state if it determines it is necessary by comparing current location to last known location
+or this.lastMeasuredLocationState then calls the decideWhatToSpeak() function, which figures out if speaking is appropriate at this time.</p>
+
+    <div class='pre p1 fill-light mt0'>checksIfLocationStateShouldChangeBasedOnNewLocation(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
+        , nothing is returned. However, the adjustPosition(position) function is triggered.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='spokengeojsondecidewhattospeak'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>decideWhatToSpeak()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L313-L361'>
+      <span>js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>This function grabs several properties from the class object instance and uses them to decide what should be spoken.
+It then calls the function speakAndUpdate(synthesizedSpeechUtterance,locationState)
+which says the generated speach utterances, updates this.lastSpokenState and this.lastSpokenStateAtTime
+Properties that it calls upon to decide what to speak include:</p>
+<ul>
+<li>this.speechStoppedDueToButtonClick</li>
+<li>this.lastMeasuredLocationState</li>
+<li>this.lastSpokenState</li>
+<li>this.sayEveryMeasurement</li>
+<li>this.checkIfEnoughTimeHasGoneToSpeakAgain</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>decideWhatToSpeak(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
+        , nothing is returned. However, the speakAndUpdate() function is called
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='spokengeojsoncheckifenoughtimehasgonetospeakagain'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>checkIfEnoughTimeHasGoneToSpeakAgain(lastSpokenStateAtTime)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L367-L376'>
+      <span>js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>This function checks to see if enough time has gone by to speak again if there is a limit on how often to speak.</p>
+
+    <div class='pre p1 fill-light mt0'>checkIfEnoughTimeHasGoneToSpeakAgain(lastSpokenStateAtTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>lastSpokenStateAtTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    , This should be the property of 'this.lastSpokenStateAtTime'
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        , Returns a boolean value of true or false. True if enough time has passed to speak.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='spokengeojsonspeakandupdate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>speakAndUpdate(synthesizedSpeechUtterance, locationState)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L389-L393'>
+      <span>js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>This function does three things via a single function so these lines don't have to be rewritten
+a bunch of times in decideWhatToSpeak() function.
+It takes in an synthesizedSpeechUtterance object that it calls to speak
+It takes in locationState argument that it makes the new value of this.lastSpokenState
+It finds a new date and updates the value of this.lastSpokenStateAtTime with it.</p>
+
+    <div class='pre p1 fill-light mt0'>speakAndUpdate(synthesizedSpeechUtterance: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, locationState: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>synthesizedSpeechUtterance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    , A synthesizedSpeechUtterance object created in decideWhatToSpeak() function
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>locationState</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    , A locationState string created in decideWhatToSpeak() function that represents
+the location state value of the last measured position. This might be "outside" or "inside" for example.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
+        , nothing is returned. However, the adjustPosition(position) function is triggered.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='spokengeojsonstopspeechutteranceandloop'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>stopSpeechUtteranceAndLoop()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L402-L416'>
+      <span>js/index.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>This function stops the speech utterance calls and sets this.locationState to "noLocationKnownYet"
+It also changes the button styles so it is obvious they were pushed.</p>
+<p>These changes are all reverse if the start buton is pressed again and getLocation function is called.</p>
+
+    <div class='pre p1 fill-light mt0'>stopSpeechUtteranceAndLoop(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
@@ -1257,7 +1222,7 @@ TODO Explain it more!</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>changeSpeakingRate(howOften, howOfte)</span>
+            <span class='code strong strong truncate'>changeSpeakingRate(howOften)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1267,18 +1232,19 @@ TODO Explain it more!</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L429-L466'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L425-L460'>
       <span>js/index.js</span>
       </a>
     
   </div>
   
 
-  <p>TODO --- This function changes the rate and circumstances of speech utterance calls
-TODO
-TODO Explain it more!</p>
+  <p>This function changes how often words are spoken are the introductury text.
+If the howOften argument is "boundaries", then it only tells the user when they have passed from "outside" to "inside" or the inverse.
+If the howOften argument is set to "constantly", the speaker will also here a message that they are "still in ___" at some interval set by other configuration properties.
+This function is probably called as a result of a button push in the user interface.</p>
 
-    <div class='pre p1 fill-light mt0'>changeSpeakingRate(howOften: any, howOfte: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
+    <div class='pre p1 fill-light mt0'>changeSpeakingRate(howOften: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
   
   
 
@@ -1295,96 +1261,8 @@ TODO Explain it more!</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>howOften</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>howOfte</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    , A string value of preferred state. Options are ....... TODO.....
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></code>:
-        , nothing is returned
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='spokengeojsonshowerror'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>showError(error)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L474-L489'>
-      <span>js/index.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>TODO --- This function shows more useful errors when they occur in a certain place in the class</p>
-
-    <div class='pre p1 fill-light mt0'>showError(error: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>error</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
-	    , the error
+            <span class='code bold'>howOften</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    , A string value of preferred state. Options are "boundaries" and "constantly".
 
           </div>
           
@@ -1445,7 +1323,7 @@ TODO Explain it more!</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L502-L527'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L472-L497'>
       <span>js/index.js</span>
       </a>
     
@@ -1525,7 +1403,7 @@ when the class instance was first initiated.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a1011faaa7daea5d466de0c9e9ec1a138c66b4db/js/index.js#L534-L536'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/JustinGOSSES/houston-hackathon-spoken-floodplain/blob/a97f9ba46d71df787cb62b579ec1686dce25e117/js/index.js#L504-L506'>
       <span>js/index.js</span>
       </a>
     
