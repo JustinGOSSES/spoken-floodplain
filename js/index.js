@@ -419,6 +419,7 @@ class spokenGeoJSON {
    * If the howOften argument is set to "constantly", the speaker will also here a message that they are "still in ___" at some interval set by other configuration properties.
    * This function is probably called as a result of a button push in the user interface. 
    * @param {string} howOften, A string value of preferred state. Options are "boundaries" and "constantly".
+   * @param {string} newtimeInterval, This updates the property this.speakHowOftenIfNotEveryInSeconds that is used to determine how often to give location state updates when there is no change.
    * @returns {undefined} , nothing is returned
    */
   changeSpeakingRate(howOften,newtimeInterval=10){ //// 'constantly' or 'boundaries' are expected values for howOften
@@ -473,12 +474,19 @@ class spokenGeoJSON {
 }
 
 
-
-function myFunction() {
+ /**
+   * Merely toggles show or hide on the dropdown list of buttons used to select rate at which "no change" messages are spoken.
+   * @returns {undefined} , nothing is returned
+   */
+function showOrHideItemsInTimingList() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
-// Close the dropdown if the user clicks outside of it
+ /**
+   * // Close the dropdown of class .dropbtn if the user clicks outside of it
+   * @returns {undefined} , nothing is returned
+   */
+
 window.onclick = function(event) {
   if (!event.target.matches('.dropbtn')) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -491,8 +499,6 @@ window.onclick = function(event) {
     }
   }
 }
-
-
 
 
 /**
