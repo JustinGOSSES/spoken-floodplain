@@ -76,6 +76,7 @@ class spokenGeoJSON {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
+    this.measuredLocationsCircleIcons = []
     /* PROPERTIES: location state */
     this.lastSpokenState = "noLocationKnownYet"; //// outside, inside ///floodplain500yr, floodplain100yr, floodway
     this.lastMeasuredLocationState = "noLocationKnownYet"; //// values are "outside", "inside"
@@ -257,8 +258,20 @@ class spokenGeoJSON {
         document.getElementById("location").innerHTML = "Latitude: " + this.lat + "<br>Longitude: " + this.lng;
         //// Add marker for location point onto map:
         this.map.setView([this.lat, this.lng], 15)
-        const marker1 = L.marker([this.lat, this.lng]).addTo(this.map);
-        //////////
+        
+        if(this.measuredLocationsCircleIcons.length > 0){
+          for (let i = 0; i < this.measuredLocationsCircleIcons.length; i++){
+            this.measuredLocationsCircleIcons[i].setStyle({color:'green',fillColor: 'green'});
+          } 
+        }
+        var circle = L.circle([this.lat, this.lng], {
+          color: 'red',
+          fillColor: '#f03',
+          fillOpacity: 0.1,
+          radius: 75
+          }).addTo(this.map);
+        this.measuredLocationsCircleIcons.push(circle)
+        // const marker1 = L.marker([this.lat, this.lng]).addTo(this.map);
       this.checksIfLocationStateShouldChangeBasedOnNewLocation()
   }
   /**
