@@ -310,11 +310,10 @@ class spokenGeoJSON {
   * - this.checkIfEnoughTimeHasGoneToSpeakAgain
   * @returns {undefined} , nothing is returned. However, the speakAndUpdate() function is called
   */
-  decideWhatToSpeak(){ //this.sayEveryMeasurement
+  decideWhatToSpeak(){ 
     if(this.speechStoppedDueToButtonClick == false){
       //// If new location is same as old location state, "outside" or "inside" then this evaluates as true.
       if(this.lastMeasuredLocationState == this.lastSpokenState){
-        //// if this.sayEveryMeasurement == false, don't say anything unless there is a chance, so everything else inside this function shouldn't be called and nothing should happen!
         if(this.sayEveryMeasurement == true){
           console.log("In insideLoop function, var newLocationState == this.lastSpokenState")
           console.log("This means no change in location state, which was last: ",this.lastSpokenState, "floodplain. And current is ",this.lastMeasuredLocationState)
@@ -422,8 +421,9 @@ class spokenGeoJSON {
    * @param {string} howOften, A string value of preferred state. Options are "boundaries" and "constantly".
    * @returns {undefined} , nothing is returned
    */
-  changeSpeakingRate(howOften){ //// 'constantly' or 'boundaries' are expected values for howOften
+  changeSpeakingRate(howOften,newtimeInterval=10){ //// 'constantly' or 'boundaries' are expected values for howOften
     //// Change sayEveryMeasurement from true to false if howOften variable is 'boundaries' and inverse other way
+    console.log("IN function changeSpeakingRate: howOften = ",howOften," and newtimeInterval =",newtimeInterval)
     try {
       console.log("sayEveryMeasurement = ",this.sayEveryMeasurement)
       if (this.sayEveryMeasurement == true && howOften == 'boundaries' ){
@@ -438,7 +438,19 @@ class spokenGeoJSON {
       }
       else if (this.sayEveryMeasurement == false  && howOften == 'constantly' ){
         this.sayEveryMeasurement = true
+        this.speakHowOftenIfNotEveryInSeconds = newtimeInterval
         let speakingRateConstant = new SpeechSynthesisUtterance("Now giving information every several seconds."); 
+         this.speechTool.speak(speakingRateConstant);
+            //// Change button focus state
+        var element = document.getElementById("constantly");
+        element.classList.add("selected");
+        var elmentOther =  document.getElementById('boundaries');
+        elmentOther.classList.remove('selected');
+      }
+      else if (howOften == 'constantly' && parseFloat(newtimeInterval) != parseFloat(this.speakHowOftenIfNotEveryInSeconds)){
+        this.sayEveryMeasurement = true
+        this.speakHowOftenIfNotEveryInSeconds = newtimeInterval
+        let speakingRateConstant = new SpeechSynthesisUtterance("Now giving information every "+newtimeInterval+" seconds or whenever a floodplain boundary is crossed."); 
          this.speechTool.speak(speakingRateConstant);
             //// Change button focus state
         var element = document.getElementById("constantly");
@@ -459,6 +471,28 @@ class spokenGeoJSON {
     this.getLocation(this.withinFloodplainSpeak,this.notWithinFloodplainSpeak)
   }
 }
+
+
+
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
 
 
 /**

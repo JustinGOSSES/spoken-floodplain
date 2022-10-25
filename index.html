@@ -62,16 +62,17 @@
         <div class="row">
             <br/>
             <div class="col text-center">
-                <button id="constantly" class="btn selected" onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('constantly')" style = "background-color: #bab1cd"><i class="glyphicon glyphicon-map-marker"></i>Speak every few seconds</button>
-
-               
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="btn selected dropbtn constantly">How often to say whether you are inside the floodplain</button>
+                    <div id="myDropdown" class="dropdown-content">
+                      <a class="constantly" onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('constantly',10)" >10 seconds</a>
+                      <a class="constantly"onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('constantly',60)">60 minute</a>
+                      <a class="constantly" onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('constantly',300)">300 seconds or 5 minutes</a>
+                    </div>
+                  </div>
                 <br/>
                 <br/>
-                
                 <button id="boundaries" class="btn" onclick="spokenGeoJSON_Harris_global.changeSpeakingRate('boundaries')" style = "background-color: #f8ef89"><i class="glyphicon glyphicon-map-marker"></i>Speak Only When Entering or Leaving Floodplain</button>
-                
-               
-                
             </div>
         </div>
     </div>
