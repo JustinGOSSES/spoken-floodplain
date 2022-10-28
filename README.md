@@ -14,7 +14,7 @@ Although this implimentation is specific to floodplains in Harris County (Housto
 
 ## live site 
 
-https://justingosses.github.io/spoken-floodplain//docs/#spokengeojson
+https://justingosses.github.io/spoken-floodplain/
 
 
 Slides following the Houston Hackathon template: https://docs.google.com/presentation/d/1kz7w97LEenhE0t2bj9gjVpCtbpgohDKEAaqHmn88WYE/edit?usp=sharing
