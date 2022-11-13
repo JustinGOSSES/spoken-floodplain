@@ -64,10 +64,6 @@ Might do a write up eventually of things that don't work or bugs along the way i
 Further description of how to download and then how to process the GIS datasets in shapefile and other formats into a single GEOJSON that can be 
 worked with on the web is found in a Jupyter Notebook in the notebooks folder called `FEMA FIRM COUNTY LEVEL DATA HARRIS Shapefile to GEOJSON.ipynb`.
 
-```location
-https://raw.githubusercontent.com/JustinGOSSES/spoken-floodplain/main/data/FEMA_FIRM_FloodPolygons.json
-```
-
 ### Technology Used
 Reuses free & open data. No server necessary, all front-end. All technology capabilities necessary already exists, just not combined in this way, which made it well suited for a short hackathon.
 
