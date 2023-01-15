@@ -12,6 +12,8 @@ _This is an experiment in taking floodplain information and providing it in a di
 
 Although this implimentation is specific to floodplains in Harris County (Houston) Texas, the basic idea might be extended to any geojson file or files.
 
+A longer write up can be found in this blog post [maps that speak](http://localhost:3000/blog/maps-that-speak)
+
 ## live site 
 
 https://justingosses.github.io/spoken-floodplain/
